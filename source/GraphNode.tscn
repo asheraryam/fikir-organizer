@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://GraphNode.gd" type="Script" id=1]
+[ext_resource path="res://TextEditExpand.gd" type="Script" id=2]
+
+[node name="GraphNode" type="GraphNode"]
+margin_right = 32.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 160, 80 )
+mouse_filter = 1
+show_close = true
+resizable = true
+slot/0/left_enabled = false
+slot/0/left_type = 0
+slot/0/left_color = Color( 1, 1, 1, 1 )
+slot/0/right_enabled = false
+slot/0/right_type = 0
+slot/0/right_color = Color( 1, 1, 1, 1 )
+slot/1/left_enabled = false
+slot/1/left_type = 0
+slot/1/left_color = Color( 1, 1, 1, 1 )
+slot/1/right_enabled = false
+slot/1/right_type = 0
+slot/1/right_color = Color( 1, 1, 1, 1 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextEdit" type="TextEdit" parent="."]
+margin_left = 16.0
+margin_top = 24.0
+margin_right = 176.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 160, 40 )
+wrap_enabled = true
+script = ExtResource( 2 )
+min_line = 1
+max_line = 3
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_left = 16.0
+margin_top = 65.0
+margin_right = 176.0
+margin_bottom = 225.0
+rect_min_size = Vector2( 160, 160 )
+stretch_mode = 3
+[connection signal="gui_input" from="TextEdit" to="." method="_on_TextEdit_gui_input"]
+[connection signal="text_changed" from="TextEdit" to="TextEdit" method="_on_TextEdit_text_changed"]
