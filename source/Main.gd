@@ -15,17 +15,23 @@ func _ready():
 
 var last_offset = Vector2(0,0)
 func _input(event : InputEvent):
-	if event.is_action_pressed("add_node"):
-		var new_node = graph_node.instance()
-		
-		new_node.offset += initial_node_position + (
-#			Vector2(int(node_index/5) * additional_offset.x, 
-			Vector2(node_index * additional_offset.x, 
-			(node_index % 5) * additional_offset.y))
-		
-		$GraphEdit.add_child(new_node)
-		
-		node_index +=1
+#	if event.is_action_released("ui_select"):
+#		print(OS.clipboard)
+	
+	if Input.is_key_pressed(KEY_ALT):
+		if event.is_action_pressed("add_node"):
+			var new_node = graph_node.instance()
+			
+			new_node.offset += initial_node_position + (
+		#			Vector2(int(node_index/5) * additional_offset.x, 
+				Vector2(node_index * additional_offset.x, 
+				(node_index % 5) * additional_offset.y))
+			
+			$GraphEdit.add_child(new_node)
+			
+			new_node.set_node_empty()
+			
+			node_index +=1
 	
 	if event.is_pressed():
 		if event is InputEventKey:

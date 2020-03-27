@@ -77,7 +77,7 @@ func _update_height(count):
 	
 	update()
 
-func _on_TextEdit_text_changed():
+func _on_ExpandingText_text_changed():
 	var new_line_count = _get_real_line_count()
 	
 	if line_count < new_line_count:
