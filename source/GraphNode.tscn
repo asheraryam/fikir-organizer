@@ -7,7 +7,7 @@
 [ext_resource path="res://Themes/Nodes/Normal/Option.tres" type="StyleBox" id=5]
 [ext_resource path="res://Themes/Nodes/Normal/Expression.tres" type="StyleBox" id=6]
 
-[sub_resource type="StyleBoxFlat" id=4]
+[sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.145098, 0.172549, 0.231373, 1 )
 corner_radius_top_left = 1
 corner_radius_top_right = 1
@@ -26,7 +26,6 @@ mouse_filter = 1
 theme = ExtResource( 4 )
 custom_styles/frame = ExtResource( 5 )
 custom_styles/selectedframe = ExtResource( 6 )
-title = "Image"
 show_close = true
 resizable = true
 slot/0/left_enabled = false
@@ -85,10 +84,10 @@ focus_neighbour_right = NodePath("../../BodyText")
 focus_neighbour_bottom = NodePath("../../BodyText")
 focus_next = NodePath("../../BodyText")
 focus_previous = NodePath("../../BodyText")
-custom_styles/read_only = SubResource( 4 )
-custom_styles/focus = SubResource( 4 )
-custom_styles/normal = SubResource( 4 )
-custom_styles/completion = SubResource( 4 )
+custom_styles/read_only = SubResource( 1 )
+custom_styles/focus = SubResource( 1 )
+custom_styles/normal = SubResource( 1 )
+custom_styles/completion = SubResource( 1 )
 wrap_enabled = true
 script = ExtResource( 2 )
 expand = false
@@ -127,10 +126,10 @@ focus_neighbour_right = NodePath("../HBoxContainer/TextEdit")
 focus_neighbour_bottom = NodePath("../HBoxContainer/TextEdit")
 focus_next = NodePath("../HBoxContainer/TextEdit")
 focus_previous = NodePath("../HBoxContainer/TextEdit")
-custom_styles/read_only = SubResource( 4 )
-custom_styles/focus = SubResource( 4 )
-custom_styles/normal = SubResource( 4 )
-custom_styles/completion = SubResource( 4 )
+custom_styles/read_only = SubResource( 1 )
+custom_styles/focus = SubResource( 1 )
+custom_styles/normal = SubResource( 1 )
+custom_styles/completion = SubResource( 1 )
 wrap_enabled = true
 script = ExtResource( 2 )
 min_line = 1

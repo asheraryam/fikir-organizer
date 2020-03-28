@@ -2,12 +2,19 @@ extends GraphNode
 
 var API_KEY_THUMBNAILSWS = "ab97c2113e52c3aeca17d5d2b218aa2a4ac169d95308"
 var SNAPSHOT_WIDTH = 1080 #720
-onready var http_request := $HTTPRequest
 
+onready var http_request := $HTTPRequest
 onready var text_edit = $HBoxContainer/ImageSettings/TextEdit
 onready var lock_btn = $HBoxContainer/ImageSettings/LockButton
 onready var url_label = $HBoxContainer/ImageSettings/URL_Label
+onready var body_textedit = $BodyText
+
 var texture_rect : TextureButton
+
+var is_image_local := false
+var image_path := ""
+
+var _last_requested_link := ""
 
 func _ready():
 	texture_rect = get_node("ImageContainer/TextureRect")
@@ -21,7 +28,11 @@ func _ready():
 
 func get_snapshot(url:String):
 	var thing = "https://api.thumbnail.ws/api/" + API_KEY_THUMBNAILSWS + "/thumbnail/get?url=" +url.percent_encode()+"&width="+ str(SNAPSHOT_WIDTH).percent_encode()
+	_last_requested_link = thing
+	is_image_local = false
+	
 	print(thing)
+	
 	var error = http_request.request(thing)
 	if error != OK:
 	#	push_error("An error occurred in the HTTP request.")
@@ -31,6 +42,33 @@ func get_snapshot(url:String):
 	text_edit.text = url
 	set_node_has_image()
 	return true
+
+func set_text_from_clipboard(clip_text:String):
+	print("Set text edit from clipboard" + clip_text)
+	body_textedit.text = clip_text
+
+func set_image_from_local(path):
+	var texture : ImageTexture = ImageTexture.new()
+	texture.load(path)
+	
+	is_image_local = true
+
+	image_show_success(texture, path)
+
+func image_show_success(texture, path):
+	
+	image_path = path
+	
+	text_edit.text = path
+	texture_rect.texture_normal = texture
+	lock_btn.visible = true
+	lock_btn.pressed = true
+	text_edit.readonly = true
+			
+	if texture:
+		set_node_has_image()
+	else:
+		set_node_empty()
 
 func get_image(url : String):
 	if url.find("gyazo.com") != -1 and url.find("i.gyazo.com") == -1:
@@ -42,8 +80,9 @@ func get_image(url : String):
 		url.replace("imgur.com", "i.imgur.com")
 		url += ".png"
 	
-
-		
+	_last_requested_link = url
+	is_image_local = false
+	
 	var http_stat = http_request.get_http_client_status()
 	if http_stat != HTTPClient.STATUS_CONNECTING and http_stat != HTTPClient.STATUS_RESOLVING:
 		var error = http_request.request(url)
@@ -78,20 +117,7 @@ func _http_request_completed(result, response_code, headers, body):
 	
 	texture.create_from_image(image)
 	
-	# Display the image in a TextureRect node.
-#	var texture_rect = TextureRect.new()
-#	add_child(texture_rect)
-	texture_rect.texture_normal = texture
-	lock_btn.visible = true
-	lock_btn.pressed = true
-	text_edit.readonly = true
-			
-	if texture:
-		set_node_has_image()
-	else:
-		set_node_empty()
-		
-#	$TextureRect.rect_size = texture.get_size()
+	image_show_success(texture, _last_requested_link)
 
 func _on_Node_close_request():
 	queue_free()
@@ -123,7 +149,7 @@ func get_text(name):
 
 func _on_Node_raise_request():
 	raise()
-	$BodyText.grab_focus()
+	body_textedit.grab_focus()
 
 func _on_TextEdit_gui_input(event: InputEvent):
 	if event.is_action_released("ui_accept"):
@@ -139,8 +165,6 @@ func check_for_image(p_url: String = ""):
 	if url:
 		var success = get_image(url)
 		if success:
-			if p_url:
-				text_edit.text = p_url
 			var base_name = url.trim_prefix("http://").trim_prefix("https://")
 			base_name = base_name.split("/")[0]
 #			title = str(base_name)
@@ -180,7 +204,7 @@ func set_node_has_image():
 	
 func force_selected():
 	selected= true
-	$BodyText.grab_focus()
+	body_textedit.grab_focus()
 
 
 func _on_Scale_Size_Button_toggled(button_pressed):
@@ -200,12 +224,11 @@ func _on_TextureRect_pressed():
 
 func save_node():
 	return {
-		"image_url": text_edit.text.trim_suffix("\n"),
-		"text_body": $BodyText.text
+		"image_path": image_path,
+		"image_is_local": is_image_local,
+		"text_body": body_textedit.text
 	}
-
 
 func _on_LockButton_toggled(button_pressed):
 	text_edit.readonly = button_pressed
-
 

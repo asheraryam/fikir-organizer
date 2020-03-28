@@ -9,6 +9,8 @@ var node_index = 0
 
 var graph_node = load("res://GraphNode.tscn")
 
+onready var clipboard = $Clipboard
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -18,25 +20,35 @@ func _input(event : InputEvent):
 #	if event.is_action_released("ui_select"):
 #		print(OS.clipboard)
 	
-	if Input.is_key_pressed(KEY_ALT):
-		if (event.is_action_pressed("add_node") or  event.is_action_pressed(
-			"paste_url_with_snapshot") or event.is_action_pressed("paste_image_url")):
-			var new_node : GraphNode = graph_node.instance()
-			
-			new_node.offset += initial_node_position + (
-		#			Vector2(int(node_index/5) * additional_offset.x, 
-				Vector2(node_index * additional_offset.x, 
+	
+	if event.is_action_pressed("node_add_wrapper"):
+		var new_node : GraphNode = graph_node.instance()
+		
+		new_node.offset += initial_node_position + (
+	#			Vector2(int(node_index/5) * additional_offset.x, 
+			Vector2(node_index * additional_offset.x, 
 				(node_index % 5) * additional_offset.y))
-			
-			$GraphEdit.add_child(new_node)
-			
-			new_node.set_node_empty()
-			if event.is_action_pressed("paste_image_url"):
-				new_node.get_image(OS.clipboard)
-			if event.is_action_pressed("paste_url_with_snapshot"):
-				new_node.get_snapshot(OS.clipboard)
-			new_node.force_selected()
-			node_index +=1
+		
+		$GraphEdit.add_child(new_node)
+		
+		new_node.set_node_empty()
+		if event.is_action_pressed("paste_from_clipboard"):
+			var image_file_path = clipboard.get_image()
+			if image_file_path:
+				print("Clipboard saved to: " + str(image_file_path))
+				new_node.set_image_from_local(image_file_path)
+			else:
+				var clip_text = clipboard.get_text()
+				new_node.set_text_from_clipboard(clip_text)
+		if event.is_action_pressed("paste_image_url"):
+			var clip_text = clipboard.get_text()
+#			new_node.get_image(OS.clipboard)
+			new_node.get_image(clip_text)
+		if event.is_action_pressed("paste_url_with_snapshot"):
+			var clip_text = clipboard.get_text()
+			new_node.get_snapshot(clip_text)
+		new_node.force_selected()
+		node_index +=1
 	
 	if event.is_pressed():
 		if event is InputEventKey:
