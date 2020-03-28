@@ -9,8 +9,6 @@ var node_index = 0
 
 var graph_node = load("res://GraphNode.tscn")
 
-onready var clipboard = $Clipboard
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -33,20 +31,22 @@ func _input(event : InputEvent):
 		
 		new_node.set_node_empty()
 		if event.is_action_pressed("paste_from_clipboard"):
-			var image_file_path = clipboard.get_image()
+			var image_file_path = ClipBoardUtils.get_image()
 			if image_file_path:
 				print("Clipboard saved to: " + str(image_file_path))
 				new_node.set_image_from_local(image_file_path)
 			else:
-				var clip_text = clipboard.get_text()
+				var clip_text = ClipBoardUtils.get_text()
 				new_node.set_text_from_clipboard(clip_text)
 		if event.is_action_pressed("paste_image_url"):
-			var clip_text = clipboard.get_text()
+			var clip_text = ClipBoardUtils.get_text()
 #			new_node.get_image(OS.clipboard)
-			new_node.get_image(clip_text)
+			if clip_text:
+				new_node.get_image(clip_text)
 		if event.is_action_pressed("paste_url_with_snapshot"):
-			var clip_text = clipboard.get_text()
-			new_node.get_snapshot(clip_text)
+			var clip_text = ClipBoardUtils.get_text()
+			if clip_text:
+				new_node.get_snapshot(clip_text)
 		new_node.force_selected()
 		node_index +=1
 	

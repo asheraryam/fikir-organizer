@@ -9,7 +9,12 @@ public class ClipBoardUtils : Node
 {
 	// Member variables here, example:
 
-	Random rnd = new Random();
+	//Random rnd = new Random();
+	
+	public String get_formatted_date()
+	{
+		return DateTime.Now.ToString("D_yyyy-MM-dd_T_hh-mm-ss-fff");
+	}
 
 	public override void _Ready()
 	{
@@ -21,7 +26,8 @@ public class ClipBoardUtils : Node
 	}
 	
 	public String get_image(){
-		var random_base_name = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() +"_"+ rnd.Next().ToString();
+		var random_base_name = get_formatted_date();
+		//var random_base_name = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() +"_"+ rnd.Next().ToString();
 		var file_name = $@"{OS.GetUserDataDir()}\{random_base_name}.png";
 
 		//if (Clipboard.ContainsImage())

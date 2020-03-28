@@ -53,7 +53,7 @@ func get_text(name):
 
 func _on_Node_raise_request():
 	raise()
-	body_textedit.grab_focus()
+#	body_textedit.grab_focus()
 
 func _on_TextEdit_gui_input(event: InputEvent):
 	if event.is_action_released("ui_accept"):
@@ -110,7 +110,7 @@ func set_node_has_image():
 		rect_size = rect_min_size
 	
 func force_selected():
-	selected= true
+#	selected= true
 	body_textedit.grab_focus()
 
 
@@ -168,6 +168,7 @@ func set_image_from_local(path):
 	is_image_local = true
 	image_show_success(texture, path)
 	return true
+	
 
 		
 func image_show_success(texture, path):
@@ -216,7 +217,7 @@ func get_image(url : String):
 
 # Called when the HTTP request is completed.
 func _http_request_completed(result, response_code, headers, body):
-	var image = Image.new()
+	var image := Image.new()
 	
 	print("Fetched image")
 	var texture : ImageTexture = ImageTexture.new()
@@ -230,6 +231,9 @@ func _http_request_completed(result, response_code, headers, body):
 			set_node_empty()
 			return
 	
+	var new_path :String = "user://" + ClipBoardUtils.get_formatted_date() + ".png"
+	print("Saved web image to " + new_path)
+	image.save_png(new_path)
 	texture.create_from_image(image)
 	
 	image_show_success(texture, _last_requested_link)
