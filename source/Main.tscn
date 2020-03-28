@@ -23,4 +23,5 @@ use_snap = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
+[connection signal="gui_input" from="GraphEdit" to="." method="_on_GraphEdit_gui_input"]
 [connection signal="scroll_offset_changed" from="GraphEdit" to="." method="_on_GraphEdit_scroll_offset_changed"]

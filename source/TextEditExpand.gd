@@ -16,6 +16,8 @@ func _ready():
 	scroll_bar = _get_vscroll_bar()
 	
 	line_spacing = _get_line_spacing()
+	print("Text edit spacing is " + str(line_spacing))
+	
 	line_height = font.get_height() + line_spacing
 	line_count = _get_real_line_count()
 	
@@ -24,23 +26,25 @@ func _ready():
 
 
 func _get_line_spacing():
+#	return font.get_string_size(" ").x
 	var spacing
 	
 	if get("custom_constants/line_spacing") != null:
 		spacing =  get("custom_constants/line_spacing")
+		print("Found custom constant spacing " + str(spacing))
 	elif theme != null:
 		if theme.get("TextEdit/constants/line_spacing") != 0:
 			spacing = theme.get("TextEdit/constants/line_spacing")
+			print("Found theme spacing " + str(spacing))
 		else:
 			spacing = 4
 	else:
 		spacing = 4
-	
 	return spacing
 
 
 func _get_real_line_count():
-	var line_count = get_line_count()
+	var line_count = ceil(get_line_count() *2.5) +1
 	var lines_to_add = 0
 	var scroll_size = scroll_bar.rect_size.x - 2
 	

@@ -9,7 +9,8 @@ onready var http_request := $HTTPRequest
 onready var text_edit = $HBoxContainer/ImageSettings/TextEdit
 onready var lock_btn = $HBoxContainer/ImageSettings/LockButton
 onready var url_label = $HBoxContainer/ImageSettings/URL_Label
-onready var body_textedit = $BodyText
+onready var body_textedit = $CaptionContainer/BodyContainer/BodyText
+onready var rich_text = $CaptionContainer/RichTextContainer/RichText
 
 var texture_rect : TextureButton
 
@@ -52,9 +53,39 @@ func get_text(name):
 		return ''
 
 func _on_Node_raise_request():
-	raise()
-#	body_textedit.grab_focus()
+	if Selection.current_selected and Selection.current_selected != self:
+		Selection.current_selected.set_node_selected(false)
+	
+	set_node_selected(true)
+	Selection.current_selected = self
 
+func set_node_selected(is_selected):
+	if is_selected:
+		raise()
+		set_rich_text_visible(false)
+	else:
+		set_selected(false)
+		set_rich_text_visible(true)
+
+
+func set_rich_text_visible(is_visible):
+	if is_visible:
+		body_textedit.get_parent().visible = false
+		rich_text.get_parent().visible = true
+	else:
+		update_rich_label_from_textbox()
+		body_textedit.get_parent().visible = true
+		rich_text.get_parent().visible = false
+		yield(get_tree().create_timer(1),"timeout")
+		call_deferred("update_rich_label_from_textbox")
+
+func update_rich_label_from_textbox():
+	rich_text.bbcode_text = body_textedit.text
+	rich_text.rect_min_size = body_textedit.rect_size 
+#	rich_text.rect_min_size.x = body_textedit.rect_size.x
+#	rich_text.rect_min_size.y = body_textedit.rect_size.y *1.5
+
+		
 func _on_TextEdit_gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.is_pressed():
 		if event.button_index  == BUTTON_LEFT and text_edit.readonly:
@@ -262,3 +293,31 @@ func save_node():
 		"image_is_local": is_image_local,
 		"text_body": body_textedit.text
 	}
+
+
+func _on_RichText_gui_input(event):
+	if event is InputEventMouseButton and event.is_pressed():
+		if event.button_index  == BUTTON_LEFT:
+			print("Pressed on RTL")
+			set_selected(true)
+			_on_Node_raise_request()
+			body_textedit.grab_focus()
+
+
+func _on_CaptionContainer_mouse_entered():
+	return
+#	set_rich_text_visible(false)
+
+
+func _on_CaptionContainer_mouse_exited():
+	return
+#	set_rich_text_visible(true)
+
+
+func _on_BodyText_gui_input(event):
+	if event is InputEventMouseButton and event.is_pressed():
+		if event.button_index  == BUTTON_LEFT:
+			print("Pressed on Body text")
+			set_selected(true)
+			_on_Node_raise_request()
+			body_textedit.grab_focus()

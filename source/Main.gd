@@ -29,6 +29,9 @@ func _input(event : InputEvent):
 		
 		$GraphEdit.add_child(new_node)
 		
+		new_node._on_Node_raise_request()
+		new_node.set_selected(true)
+		
 		new_node.set_node_empty()
 		new_node.set_link_tools_visible(true)
 		if event.is_action_pressed("paste_from_clipboard"):
@@ -81,3 +84,10 @@ func _on_GraphEdit_scroll_offset_changed(ofs):
 		yield(get_tree(),"idle_frame")
 		$GraphEdit.scroll_offset = last_offset
 
+
+func _on_GraphEdit_gui_input(event):
+	if event is InputEventMouseButton and event.is_pressed():
+		if event.button_index == BUTTON_LEFT: 
+			print("Pressed on BG graph")
+			if Selection.current_selected:
+				Selection.current_selected.set_node_selected(false)
