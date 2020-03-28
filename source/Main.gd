@@ -30,23 +30,28 @@ func _input(event : InputEvent):
 		$GraphEdit.add_child(new_node)
 		
 		new_node.set_node_empty()
+		new_node.set_link_tools_visible(true)
 		if event.is_action_pressed("paste_from_clipboard"):
 			var image_file_path = ClipBoardUtils.get_image()
 			if image_file_path:
 				print("Clipboard saved to: " + str(image_file_path))
 				new_node.set_image_from_local(image_file_path)
 			else:
+				new_node.set_link_tools_visible(false)
 				var clip_text = ClipBoardUtils.get_text()
 				new_node.set_text_from_clipboard(clip_text)
-		if event.is_action_pressed("paste_image_url"):
+		elif event.is_action_pressed("paste_image_url"):
 			var clip_text = ClipBoardUtils.get_text()
 #			new_node.get_image(OS.clipboard)
 			if clip_text:
 				new_node.get_image(clip_text)
-		if event.is_action_pressed("paste_url_with_snapshot"):
+		elif event.is_action_pressed("paste_url_with_snapshot"):
 			var clip_text = ClipBoardUtils.get_text()
 			if clip_text:
 				new_node.get_snapshot(clip_text)
+		else:
+			new_node.set_link_tools_visible(false)
+			
 		new_node.force_selected()
 		node_index +=1
 	

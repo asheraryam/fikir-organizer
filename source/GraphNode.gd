@@ -56,6 +56,12 @@ func _on_Node_raise_request():
 #	body_textedit.grab_focus()
 
 func _on_TextEdit_gui_input(event: InputEvent):
+	if event is InputEventMouseButton and event.is_pressed():
+		if event.button_index  == BUTTON_LEFT and text_edit.readonly:
+			var url = text_edit.text.trim_suffix("\n")
+			if url and url.find("http") != -1:
+				OS.shell_open(url)
+			print("Open link in browser")
 	if event.is_action_released("ui_accept"):
 		call_deferred("check_for_image")
 
@@ -76,31 +82,36 @@ func check_for_image(p_url: String = ""):
 				base_name = base_name.split("/")[0]
 		#			title = str(base_name)
 				title = "Image"
-				set_node_has_image()
-			else:
-				set_node_empty()
-	else:
-		set_node_empty()
+#				set_node_has_image()
+#			else:
+#				set_node_empty()
+#	else:
+#		set_node_empty()
 
 func _on_TextEdit_text_changed():
 	pass
 #	call_deferred("check_for_image")
 
 func set_node_empty():
-	$HBoxContainer/ImageSettings.visible = false
-	
 	title = "Image"
 	$ImageContainer/TextureRect.texture_normal = null
 #	$ImageContainer.remove_child(texture_rect)
 	$ImageContainer.hide()
-	lock_btn.visible = false
-	url_label.visible = true
-	texture_rect.rect_min_size = Vector2(0,0)
 
+	texture_rect.rect_min_size = Vector2(0,0)
 	rect_size = rect_min_size
 
+func set_link_tools_visible(is_visible):
+	if is_visible:
+		$HBoxContainer/ImageSettings.visible = true
+		url_label.visible = false
+		lock_btn.visible = true
+	else:
+		$HBoxContainer/ImageSettings.visible = false
+		lock_btn.visible = false
+		url_label.visible = true
+
 func set_node_has_image():
-	$HBoxContainer/ImageSettings.visible = true
 	url_label.visible = false
 #		$ImageContainer.add_child(texture_rect)
 	$ImageContainer.visible = true
@@ -158,6 +169,7 @@ func get_snapshot(url:String):
 func set_text_from_clipboard(clip_text:String):
 	print("Set text edit from clipboard" + clip_text)
 	body_textedit.text = clip_text
+	body_textedit._on_ExpandingText_text_changed()
 
 func set_image_from_local(path):
 	var texture : ImageTexture = ImageTexture.new()
@@ -172,12 +184,11 @@ func set_image_from_local(path):
 
 		
 func image_show_success(texture, path):
-	
 	image_path = path
 	
 	text_edit.text = path
 	texture_rect.texture_normal = texture
-	lock_btn.visible = true
+	set_link_tools_visible(true)
 	lock_btn.pressed = true
 	text_edit.readonly = true
 			
@@ -204,14 +215,15 @@ func get_image(url : String):
 		var error = http_request.request(url)
 		if error != OK:
 		#	push_error("An error occurred in the HTTP request.")
-			set_node_empty()
+#			set_node_empty()
 			return false
 		
 		text_edit.text = url
-		set_node_has_image()
+		text_edit.readonly = true
+#		set_node_has_image()
 		return true
 	
-	set_node_empty()
+#	set_node_empty()
 	return false
 
 

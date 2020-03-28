@@ -78,6 +78,7 @@ margin_left = 62.0
 margin_right = 182.0
 margin_bottom = 26.0
 rect_min_size = Vector2( 120, 20 )
+hint_tooltip = "Open URL in Browser"
 focus_neighbour_left = NodePath("../../BodyText")
 focus_neighbour_top = NodePath("../../BodyText")
 focus_neighbour_right = NodePath("../../BodyText")
