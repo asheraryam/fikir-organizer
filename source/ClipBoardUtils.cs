@@ -21,8 +21,8 @@ public class ClipBoardUtils : Node
 	}
 	
 	public String get_image(){
-		//var file_name = @"C:\Images\"+DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() + rnd.Next().ToString() + ".png";
-		var file_name = @"D:\tmp\test_screenshot.png";
+		var random_base_name = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() +"_"+ rnd.Next().ToString();
+		var file_name = $@"{OS.GetUserDataDir()}\{random_base_name}.png";
 
 		//if (Clipboard.ContainsImage())
 		//{

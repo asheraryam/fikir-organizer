@@ -1,7 +1,9 @@
 extends GraphNode
 
 var API_KEY_THUMBNAILSWS = "ab97c2113e52c3aeca17d5d2b218aa2a4ac169d95308"
-var SNAPSHOT_WIDTH = 1080 #720
+export(int)var WEB_SNAPSHOT_WIDTH = 1080 #720
+
+export(Vector2)var MIN_TEX_SIZE := Vector2(160,160)
 
 onready var http_request := $HTTPRequest
 onready var text_edit = $HBoxContainer/ImageSettings/TextEdit
@@ -11,10 +13,6 @@ onready var body_textedit = $BodyText
 
 var texture_rect : TextureButton
 
-var is_image_local := false
-var image_path := ""
-
-var _last_requested_link := ""
 
 func _ready():
 	texture_rect = get_node("ImageContainer/TextureRect")
@@ -26,8 +24,122 @@ func _ready():
 	texture_rect.connect("pressed", self, "_on_TextureRect_pressed" )
 
 
+func _on_Node_resize_request(new_minsize):
+	if texture_rect.rect_min_size.x > 0:
+		var new_tex_size = texture_rect.rect_min_size + (new_minsize - rect_size)
+		texture_rect.rect_min_size = Vector2(max(MIN_TEX_SIZE.x,new_tex_size.x),
+		max(MIN_TEX_SIZE.y,new_tex_size.y))
+	rect_size = new_minsize
+
+func _on_Node_dragged(from, to):
+	get_node('../').lastNodePosition = to
+
+func _on_Node_resized():
+	pass
+#	get_node("Lines").rect_min_size.y = self.get_rect().size.y - 45
+
+func _on_Node_text_changed():
+	pass
+
+func _on_Node_line_changed(text):
+	var length = text.length()
+
+
+func get_text(name):
+	if self.has_node('Lines'):
+		return self.get_node('Lines').get_child(0).get_text()
+	else:
+		return ''
+
+func _on_Node_raise_request():
+	raise()
+	body_textedit.grab_focus()
+
+func _on_TextEdit_gui_input(event: InputEvent):
+	if event.is_action_released("ui_accept"):
+		call_deferred("check_for_image")
+
+
+func check_for_image(p_url: String = ""):
+	var url 
+	if p_url and p_url.length() >0:
+		url = p_url
+	else:
+		url = text_edit.text.trim_suffix("\n")
+	if url:
+		var is_local = set_image_from_local(url)
+		if not is_local:
+			print("Local path not found, attempt to fetch URL.")
+			var success = get_image(url)
+			if success:
+				var base_name = url.trim_prefix("http://").trim_prefix("https://")
+				base_name = base_name.split("/")[0]
+		#			title = str(base_name)
+				title = "Image"
+				set_node_has_image()
+			else:
+				set_node_empty()
+	else:
+		set_node_empty()
+
+func _on_TextEdit_text_changed():
+	pass
+#	call_deferred("check_for_image")
+
+func set_node_empty():
+	$HBoxContainer/ImageSettings.visible = false
+	
+	title = "Image"
+	$ImageContainer/TextureRect.texture_normal = null
+#	$ImageContainer.remove_child(texture_rect)
+	$ImageContainer.hide()
+	lock_btn.visible = false
+	url_label.visible = true
+	texture_rect.rect_min_size = Vector2(0,0)
+
+	rect_size = rect_min_size
+
+func set_node_has_image():
+	$HBoxContainer/ImageSettings.visible = true
+	url_label.visible = false
+#		$ImageContainer.add_child(texture_rect)
+	$ImageContainer.visible = true
+	texture_rect.rect_min_size = Vector2(160,160)
+
+	if texture_rect.expand:
+		rect_size = rect_min_size
+	
+func force_selected():
+	selected= true
+	body_textedit.grab_focus()
+
+
+func _on_Scale_Size_Button_toggled(button_pressed):
+	if button_pressed:
+		texture_rect.expand = false
+	else:
+		texture_rect.expand = true
+		rect_size = rect_min_size
+
+func _on_TextureRect_pressed():
+	if texture_rect.expand:
+		if texture_rect.texture_normal:
+			texture_rect.expand = false
+	else:
+		texture_rect.expand = true
+		rect_size = rect_min_size
+
+
+func _on_LockButton_toggled(button_pressed):
+	text_edit.readonly = button_pressed
+	
+var is_image_local := false
+var image_path := ""
+
+var _last_requested_link := ""
+
 func get_snapshot(url:String):
-	var thing = "https://api.thumbnail.ws/api/" + API_KEY_THUMBNAILSWS + "/thumbnail/get?url=" +url.percent_encode()+"&width="+ str(SNAPSHOT_WIDTH).percent_encode()
+	var thing = "https://api.thumbnail.ws/api/" + API_KEY_THUMBNAILSWS + "/thumbnail/get?url=" +url.percent_encode()+"&width="+ str(WEB_SNAPSHOT_WIDTH).percent_encode()
 	_last_requested_link = thing
 	is_image_local = false
 	
@@ -49,12 +161,15 @@ func set_text_from_clipboard(clip_text:String):
 
 func set_image_from_local(path):
 	var texture : ImageTexture = ImageTexture.new()
-	texture.load(path)
+	var err = texture.load(path)
+	if err != OK:
+		return false
 	
 	is_image_local = true
-
 	image_show_success(texture, path)
+	return true
 
+		
 func image_show_success(texture, path):
 	
 	image_path = path
@@ -123,112 +238,11 @@ func _on_Node_close_request():
 	queue_free()
 	print('removing node')
 
-func _on_Node_resize_request(new_minsize):
-	rect_size = new_minsize
+
 	
-
-func _on_Node_dragged(from, to):
-	get_node('../').lastNodePosition = to
-
-func _on_Node_resized():
-	pass
-#	get_node("Lines").rect_min_size.y = self.get_rect().size.y - 45
-
-func _on_Node_text_changed():
-	pass
-
-func _on_Node_line_changed(text):
-	var length = text.length()
-
-
-func get_text(name):
-	if self.has_node('Lines'):
-		return self.get_node('Lines').get_child(0).get_text()
-	else:
-		return ''
-
-func _on_Node_raise_request():
-	raise()
-	body_textedit.grab_focus()
-
-func _on_TextEdit_gui_input(event: InputEvent):
-	if event.is_action_released("ui_accept"):
-		call_deferred("check_for_image")
-
-
-func check_for_image(p_url: String = ""):
-	var url 
-	if p_url and p_url.length() >0:
-		url = p_url
-	else:
-		url = text_edit.text.trim_suffix("\n")
-	if url:
-		var success = get_image(url)
-		if success:
-			var base_name = url.trim_prefix("http://").trim_prefix("https://")
-			base_name = base_name.split("/")[0]
-#			title = str(base_name)
-			title = "Image"
-			set_node_has_image()
-		else:
-			set_node_empty()
-	else:
-		set_node_empty()
-
-func _on_TextEdit_text_changed():
-	pass
-#	call_deferred("check_for_image")
-
-func set_node_empty():
-	$HBoxContainer/ImageSettings.visible = false
-	
-	title = "Image"
-	$ImageContainer/TextureRect.texture_normal = null
-#	$ImageContainer.remove_child(texture_rect)
-	$ImageContainer.hide()
-	lock_btn.visible = false
-	url_label.visible = true
-	texture_rect.rect_min_size = Vector2(0,0)
-
-	rect_size = rect_min_size
-
-func set_node_has_image():
-	$HBoxContainer/ImageSettings.visible = true
-	url_label.visible = false
-#		$ImageContainer.add_child(texture_rect)
-	$ImageContainer.visible = true
-	texture_rect.rect_min_size = Vector2(160,160)
-
-	if texture_rect.expand:
-		rect_size = rect_min_size
-	
-func force_selected():
-	selected= true
-	body_textedit.grab_focus()
-
-
-func _on_Scale_Size_Button_toggled(button_pressed):
-	if button_pressed:
-		texture_rect.expand = false
-	else:
-		texture_rect.expand = true
-		rect_size = rect_min_size
-
-func _on_TextureRect_pressed():
-	if texture_rect.expand:
-		if texture_rect.texture_normal:
-			texture_rect.expand = false
-	else:
-		texture_rect.expand = true
-		rect_size = rect_min_size
-
 func save_node():
 	return {
 		"image_path": image_path,
 		"image_is_local": is_image_local,
 		"text_body": body_textedit.text
 	}
-
-func _on_LockButton_toggled(button_pressed):
-	text_edit.readonly = button_pressed
-

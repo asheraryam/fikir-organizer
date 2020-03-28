@@ -113,6 +113,7 @@ margin_left = 122.0
 margin_right = 122.0
 margin_bottom = 0.0
 rect_min_size = Vector2( 0, 0 )
+stretch_mode = 5
 
 [node name="BodyText" type="TextEdit" parent="."]
 margin_left = 10.0
