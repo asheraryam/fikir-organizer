@@ -1,8 +1,20 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://GraphNode.gd" type="Script" id=1]
 [ext_resource path="res://TextEditExpand.gd" type="Script" id=2]
 [ext_resource path="res://ImageTextureRect.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Themes/Dialogs/Dialog.tres" type="Theme" id=4]
+[ext_resource path="res://Themes/Nodes/Normal/Option.tres" type="StyleBox" id=5]
+[ext_resource path="res://Themes/Nodes/Normal/Expression.tres" type="StyleBox" id=6]
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.145098, 0.172549, 0.231373, 1 )
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+expand_margin_left = 2.0
+expand_margin_right = 2.0
 
 [node name="GraphNode" type="GraphNode" groups=[
 "Persist",
@@ -11,6 +23,9 @@ margin_right = 214.0
 margin_bottom = 113.0
 rect_min_size = Vector2( 160, 40 )
 mouse_filter = 1
+theme = ExtResource( 4 )
+custom_styles/frame = ExtResource( 5 )
+custom_styles/selectedframe = ExtResource( 6 )
 title = "Image"
 show_close = true
 resizable = true
@@ -40,57 +55,82 @@ __meta__ = {
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-margin_left = 16.0
-margin_top = 24.0
-margin_right = 259.0
-margin_bottom = 64.0
+margin_left = 10.0
+margin_top = 33.0
+margin_right = 255.0
+margin_bottom = 59.0
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="URL_Label" type="Label" parent="HBoxContainer"]
-margin_top = 13.0
+[node name="ImageSettings" type="HBoxContainer" parent="HBoxContainer"]
+margin_right = 245.0
+margin_bottom = 26.0
+
+[node name="URL_Label" type="Label" parent="HBoxContainer/ImageSettings"]
+margin_top = 6.0
 margin_right = 58.0
-margin_bottom = 27.0
+margin_bottom = 20.0
 text = "Img URL:"
 
-[node name="TextEdit" type="TextEdit" parent="HBoxContainer"]
+[node name="TextEdit" type="TextEdit" parent="HBoxContainer/ImageSettings"]
 margin_left = 62.0
 margin_right = 182.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 120, 40 )
+margin_bottom = 26.0
+rect_min_size = Vector2( 120, 20 )
+focus_neighbour_left = NodePath("../../BodyText")
+focus_neighbour_top = NodePath("../../BodyText")
+focus_neighbour_right = NodePath("../../BodyText")
+focus_neighbour_bottom = NodePath("../../BodyText")
+focus_next = NodePath("../../BodyText")
+focus_previous = NodePath("../../BodyText")
+custom_styles/read_only = SubResource( 4 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/normal = SubResource( 4 )
+custom_styles/completion = SubResource( 4 )
 wrap_enabled = true
 script = ExtResource( 2 )
+expand = false
 min_line = 1
 max_line = 1
 
-[node name="LockButton" type="CheckBox" parent="HBoxContainer"]
+[node name="LockButton" type="CheckBox" parent="HBoxContainer/ImageSettings"]
 margin_left = 186.0
-margin_right = 243.0
-margin_bottom = 40.0
+margin_right = 245.0
+margin_bottom = 26.0
 pressed = true
 text = "Lock"
 
 [node name="ImageContainer" type="HBoxContainer" parent="."]
-margin_left = 16.0
-margin_top = 65.0
-margin_right = 259.0
-margin_bottom = 65.0
+margin_left = 10.0
+margin_top = 60.0
+margin_right = 255.0
+margin_bottom = 60.0
 alignment = 1
 
 [node name="TextureRect" parent="ImageContainer" instance=ExtResource( 3 )]
-margin_left = 121.0
-margin_right = 121.0
+margin_left = 122.0
+margin_right = 122.0
 margin_bottom = 0.0
 rect_min_size = Vector2( 0, 0 )
 
 [node name="BodyText" type="TextEdit" parent="."]
-margin_left = 16.0
-margin_top = 66.0
-margin_right = 259.0
-margin_bottom = 106.0
+margin_left = 10.0
+margin_top = 61.0
+margin_right = 255.0
+margin_bottom = 101.0
 rect_min_size = Vector2( 160, 40 )
+focus_neighbour_left = NodePath("../HBoxContainer/TextEdit")
+focus_neighbour_top = NodePath("../HBoxContainer/TextEdit")
+focus_neighbour_right = NodePath("../HBoxContainer/TextEdit")
+focus_neighbour_bottom = NodePath("../HBoxContainer/TextEdit")
+focus_next = NodePath("../HBoxContainer/TextEdit")
+focus_previous = NodePath("../HBoxContainer/TextEdit")
+custom_styles/read_only = SubResource( 4 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/normal = SubResource( 4 )
+custom_styles/completion = SubResource( 4 )
 wrap_enabled = true
 script = ExtResource( 2 )
 min_line = 1
@@ -98,8 +138,8 @@ max_line = 20
 [connection signal="close_request" from="." to="." method="_on_Node_close_request"]
 [connection signal="raise_request" from="." to="." method="_on_Node_raise_request"]
 [connection signal="resize_request" from="." to="." method="_on_Node_resize_request"]
-[connection signal="gui_input" from="HBoxContainer/TextEdit" to="." method="_on_TextEdit_gui_input"]
-[connection signal="text_changed" from="HBoxContainer/TextEdit" to="HBoxContainer/TextEdit" method="_on_ExpandingText_text_changed"]
-[connection signal="text_changed" from="HBoxContainer/TextEdit" to="." method="_on_TextEdit_text_changed"]
-[connection signal="toggled" from="HBoxContainer/LockButton" to="." method="_on_LockButton_toggled"]
+[connection signal="gui_input" from="HBoxContainer/ImageSettings/TextEdit" to="." method="_on_TextEdit_gui_input"]
+[connection signal="text_changed" from="HBoxContainer/ImageSettings/TextEdit" to="." method="_on_TextEdit_text_changed"]
+[connection signal="text_changed" from="HBoxContainer/ImageSettings/TextEdit" to="HBoxContainer/ImageSettings/TextEdit" method="_on_ExpandingText_text_changed"]
+[connection signal="toggled" from="HBoxContainer/ImageSettings/LockButton" to="." method="_on_LockButton_toggled"]
 [connection signal="text_changed" from="BodyText" to="BodyText" method="_on_ExpandingText_text_changed"]

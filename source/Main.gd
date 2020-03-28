@@ -19,8 +19,9 @@ func _input(event : InputEvent):
 #		print(OS.clipboard)
 	
 	if Input.is_key_pressed(KEY_ALT):
-		if event.is_action_pressed("add_node"):
-			var new_node = graph_node.instance()
+		if (event.is_action_pressed("add_node") or  event.is_action_pressed(
+			"paste_url_with_snapshot") or event.is_action_pressed("paste_image_url")):
+			var new_node : GraphNode = graph_node.instance()
 			
 			new_node.offset += initial_node_position + (
 		#			Vector2(int(node_index/5) * additional_offset.x, 
@@ -30,7 +31,11 @@ func _input(event : InputEvent):
 			$GraphEdit.add_child(new_node)
 			
 			new_node.set_node_empty()
-			
+			if event.is_action_pressed("paste_image_url"):
+				new_node.get_image(OS.clipboard)
+			if event.is_action_pressed("paste_url_with_snapshot"):
+				new_node.get_snapshot(OS.clipboard)
+			new_node.force_selected()
 			node_index +=1
 	
 	if event.is_pressed():
