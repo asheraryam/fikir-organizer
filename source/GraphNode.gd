@@ -321,3 +321,7 @@ func _on_BodyText_gui_input(event):
 			set_selected(true)
 			_on_Node_raise_request()
 			body_textedit.grab_focus()
+
+
+func _on_GraphNode_gui_input(event):
+	pass # Replace with function body.

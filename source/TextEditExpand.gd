@@ -16,7 +16,7 @@ func _ready():
 	scroll_bar = _get_vscroll_bar()
 	
 	line_spacing = _get_line_spacing()
-	print("Text edit spacing is " + str(line_spacing))
+#	print("Text edit spacing is " + str(line_spacing))
 	
 	line_height = font.get_height() + line_spacing
 	line_count = _get_real_line_count()

@@ -27,7 +27,6 @@ expand_margin_right = 2.0
 margin_right = 265.0
 margin_bottom = 111.0
 rect_min_size = Vector2( 160, 40 )
-mouse_filter = 1
 theme = ExtResource( 4 )
 custom_styles/frame = ExtResource( 5 )
 custom_styles/selectedframe = ExtResource( 6 )
@@ -178,11 +177,12 @@ custom_fonts/normal_font = ExtResource( 9 )
 bbcode_enabled = true
 script = ExtResource( 7 )
 [connection signal="close_request" from="." to="." method="_on_Node_close_request"]
+[connection signal="gui_input" from="." to="." method="_on_GraphNode_gui_input"]
 [connection signal="raise_request" from="." to="." method="_on_Node_raise_request"]
 [connection signal="resize_request" from="." to="." method="_on_Node_resize_request"]
 [connection signal="gui_input" from="HBoxContainer/ImageSettings/TextEdit" to="." method="_on_TextEdit_gui_input"]
-[connection signal="text_changed" from="HBoxContainer/ImageSettings/TextEdit" to="." method="_on_TextEdit_text_changed"]
 [connection signal="text_changed" from="HBoxContainer/ImageSettings/TextEdit" to="HBoxContainer/ImageSettings/TextEdit" method="_on_ExpandingText_text_changed"]
+[connection signal="text_changed" from="HBoxContainer/ImageSettings/TextEdit" to="." method="_on_TextEdit_text_changed"]
 [connection signal="toggled" from="HBoxContainer/ImageSettings/LockButton" to="." method="_on_LockButton_toggled"]
 [connection signal="mouse_entered" from="CaptionContainer" to="." method="_on_CaptionContainer_mouse_entered"]
 [connection signal="mouse_exited" from="CaptionContainer" to="." method="_on_CaptionContainer_mouse_exited"]

@@ -47,21 +47,21 @@ public class ClipBoardUtils : Node
 
 		if (Clipboard.ContainsImage())
 		{
-			GD.Print("Clipboard contains image.");
+			//GD.Print("Clipboard contains image.");
 
 			// ImageUIElement.Source = Clipboard.GetImage(); // does not work
 			System.Windows.Forms.IDataObject clipboardData = System.Windows.Forms.Clipboard.GetDataObject();
 			if (clipboardData != null)
 			{
-				GD.Print("Clipboard data retrieved.");
+				//GD.Print("Clipboard data retrieved.");
 
 				if (clipboardData.GetDataPresent(System.Windows.Forms.DataFormats.Bitmap))
 				{
-					GD.Print("Clipboard data has bitmap.");
+					//GD.Print("Clipboard data has bitmap.");
 
 					System.Drawing.Bitmap bitmap = (System.Drawing.Bitmap)clipboardData.GetData(System.Windows.Forms.DataFormats.Bitmap);
-					GD.Print("Cast to bitmap.");
-					GD.Print("Attempt to save to " + file_name);
+					//GD.Print("Cast to bitmap.");
+					//GD.Print("Attempt to save to " + file_name);
 
 					bitmap.Save(file_name, ImageFormat.Png);
 					//ImageUIElement.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
@@ -70,7 +70,7 @@ public class ClipBoardUtils : Node
 				}
 			}
 		}
-		GD.Print("No Image Found in Clipboard.");
+		//GD.Print("No Image Found in Clipboard.");
 		return null;
 	}
 
