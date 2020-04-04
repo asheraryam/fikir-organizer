@@ -13,6 +13,12 @@ var graph_node = load("res://GraphNode.tscn")
 func _ready():
 	pass # Replace with function body.
 
+func _notification(what):
+	if (what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST):
+		persist.save_game()
+		print ("You are quit!")
+		get_tree().quit() # default behavior
+
 		
 var last_offset = Vector2(0,0)
 func _input(event : InputEvent):
@@ -33,8 +39,8 @@ func _input(event : InputEvent):
 		new_node._on_Node_raise_request()
 		new_node.set_selected(true)
 		
-		new_node.set_node_empty()
-		new_node.set_link_tools_visible(true)
+		new_node.init_state()
+		
 		if event.is_action_pressed("paste_from_clipboard"):
 			var image_file_path = ClipBoardUtils.get_image()
 			if image_file_path:
@@ -88,7 +94,7 @@ func _on_GraphEdit_scroll_offset_changed(ofs):
 
 func _on_GraphEdit_gui_input(event :InputEvent):
 	if event.is_action_pressed("paste"):
-		if Selection.current_selected:
+		if is_instance_valid(Selection.current_selected) and Selection.current_selected:
 			add_paste_to_selected()
 		else:
 			create_node_from_paste()
@@ -107,7 +113,7 @@ func _on_GraphEdit_gui_input(event :InputEvent):
 #				Selection.current_selected = null
 
 func add_paste_to_selected():
-	if not Selection.current_selected:
+	if not is_instance_valid(Selection.current_selected) or not Selection.current_selected:
 		return
 		
 	# WARNING: This mostly overwrites things

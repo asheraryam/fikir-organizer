@@ -23,6 +23,7 @@ config/icon="res://icon.png"
 
 ClipBoardUtils="*res://ClipBoardUtils.cs"
 Selection="*res://SelectionManager.gd"
+persist="*res://autoloads/Persist.gd"
 
 [input]
 
