@@ -8,10 +8,11 @@ var additional_offset := Vector2(80,80)
 var node_index = 0 
 
 var graph_node = load("res://GraphNode.tscn")
+onready var ClipBoardUtils = $Clipboard
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	Selection.ClipBoardUtils = $Clipboard
 
 func _notification(what):
 	if (what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST):

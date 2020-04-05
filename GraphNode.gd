@@ -241,7 +241,7 @@ func set_image_from_local(path):
 	if err != OK:
 		return false
 
-	var new_path: String = "user://" + ClipBoardUtils.get_formatted_date() + ".png"
+	var new_path: String = "user://" + Selection.ClipBoardUtils.get_formatted_date() + ".png"
 	print("Saved local image to " + new_path)
 	local_img_cache = new_path
 	texture.get_data().save_png(new_path)
@@ -323,7 +323,7 @@ func _http_request_completed(result, response_code, headers, body):
 			set_node_empty()
 			return
 
-	var new_path: String = "user://" + ClipBoardUtils.get_formatted_date() + ".png"
+	var new_path: String = "user://" + Selection.ClipBoardUtils.get_formatted_date() + ".png"
 	print("Saved web image to " + new_path)
 	local_img_cache = new_path
 	image.save_png(new_path)
