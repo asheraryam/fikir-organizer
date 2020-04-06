@@ -12,6 +12,7 @@ onready var ClipBoardUtils = $Clipboard
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	get_tree().get_root().set_transparent_background(true) 
 	Selection.ClipBoardUtils = $Clipboard
 
 func _notification(what):
@@ -170,3 +171,9 @@ func create_node_from_paste():
 
 	new_node.force_selected()
 	node_index +=1
+
+
+func _on_Transparent_toggled(button_pressed):
+	$Background.visible = not button_pressed
+#	ProjectSettings.set_setting("display/window/size/always_on_top", button_pressed)
+#	ProjectSettings.save()

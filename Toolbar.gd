@@ -11,18 +11,11 @@ func _ready():
 	pass # Replace with function body.
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
-
-func _on_Transparent_toggled(button_pressed):
-	OS.window_fullscreen = button_pressed
-	get_tree().get_root().set_transparent_background(button_pressed) 
 
 var last_pressed_position : Vector2
 var pointer_pressed = false
-var state = "toolbar_bottom"
+var state = "toolbar_pos_top"
+var allow_move = true
 func _on_ToolbarPanel_gui_input(event : InputEvent):
 	if event.is_action_pressed("pointer"):
 		pointer_pressed = true
@@ -31,18 +24,23 @@ func _on_ToolbarPanel_gui_input(event : InputEvent):
 		pointer_pressed = false
 	if event is InputEventMouseMotion and pointer_pressed:
 		var change = last_pressed_position.y - event.position.y
-		if  abs(change)> 50:
+		if  abs(change)> 50 and allow_move:
+			last_pressed_position = event.position
 			if change > 0:
-				if state != "toolbar_top":
-					state = "toolbar_top"
-					$AnimationPlayer.play(state)
-				else:
-					last_pressed_position = event.position
+				if state != "toolbar_pos_top":
+					state = "toolbar_pos_top"
+					rect_position.y = 0
+					allow_move = false
+					yield(get_tree().create_timer(0.2),"timeout")
+					allow_move = true
+#					$AnimationPlayer.play(state)
 					
 			else:
-				if state != "toolbar_bottom":
-					state = "toolbar_bottom"
-					$AnimationPlayer.play(state)
-				else:
-					last_pressed_position = event.position
+				if state != "toolbar_pos_bottom":
+					state = "toolbar_pos_bottom"
+					rect_position.y = OS.get_window_size().y - 39
+					allow_move = false
+					yield(get_tree().create_timer(0.2),"timeout")
+					allow_move = true
+#					$AnimationPlayer.play(state)
 					
