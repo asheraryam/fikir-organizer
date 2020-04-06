@@ -346,11 +346,30 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Transparent" type="CheckButton" parent="Toolbar/ToolbarPanel"]
-margin_right = 76.0
+[node name="HBoxContainer" type="HBoxContainer" parent="Toolbar/ToolbarPanel"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Transparent" type="CheckButton" parent="Toolbar/ToolbarPanel/HBoxContainer"]
+margin_right = 155.0
 margin_bottom = 40.0
 text = "Transparent"
+
+[node name="Fullscreen" type="CheckButton" parent="Toolbar/ToolbarPanel/HBoxContainer"]
+visible = false
+margin_left = 159.0
+margin_right = 305.0
+margin_bottom = 40.0
+pressed = true
+text = "Fullscreen"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="gui_input" from="GraphEdit" to="." method="_on_GraphEdit_gui_input"]
 [connection signal="scroll_offset_changed" from="GraphEdit" to="." method="_on_GraphEdit_scroll_offset_changed"]
 [connection signal="gui_input" from="Toolbar/ToolbarPanel" to="Toolbar" method="_on_ToolbarPanel_gui_input"]
-[connection signal="toggled" from="Toolbar/ToolbarPanel/Transparent" to="." method="_on_Transparent_toggled"]
+[connection signal="toggled" from="Toolbar/ToolbarPanel/HBoxContainer/Transparent" to="." method="_on_Transparent_toggled"]
+[connection signal="toggled" from="Toolbar/ToolbarPanel/HBoxContainer/Fullscreen" to="Toolbar" method="_on_Fullscreen_toggled"]

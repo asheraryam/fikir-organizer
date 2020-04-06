@@ -44,3 +44,8 @@ func _on_ToolbarPanel_gui_input(event : InputEvent):
 					allow_move = true
 #					$AnimationPlayer.play(state)
 					
+
+
+func _on_Fullscreen_toggled(button_pressed):
+	OS.window_fullscreen = button_pressed
+	print("Toggle fullscreen")
