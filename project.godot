@@ -24,13 +24,6 @@ config/icon="res://icon.png"
 Selection="*res://SelectionManager.gd"
 persist="*res://autoloads/Persist.gd"
 
-[display]
-
-window/size/fullscreen=true
-window/size/always_on_top=true
-window/per_pixel_transparency/allowed=true
-window/per_pixel_transparency/enabled=true
-
 [input]
 
 add_node={

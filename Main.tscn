@@ -354,6 +354,7 @@ __meta__ = {
 }
 
 [node name="Transparent" type="CheckButton" parent="Toolbar/ToolbarPanel/HBoxContainer"]
+visible = false
 margin_right = 155.0
 margin_bottom = 40.0
 text = "Transparent"
