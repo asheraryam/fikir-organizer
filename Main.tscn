@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Themes/Containers/Graph.tres" type="Theme" id=2]
 [ext_resource path="res://Toolbar.gd" type="Script" id=3]
 [ext_resource path="res://GraphEdit.gd" type="Script" id=4]
+[ext_resource path="res://ClipBoardUtils.cs" type="Script" id=5]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -294,6 +295,7 @@ __meta__ = {
 }
 
 [node name="Clipboard" type="Node" parent="."]
+script = ExtResource( 5 )
 
 [node name="Background" type="TextureRect" parent="."]
 anchor_right = 1.0
@@ -307,7 +309,7 @@ __meta__ = {
 [node name="ColorRect" type="ColorRect" parent="Background"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.329412, 0.435294, 0.356863, 1 )
+color = Color( 0.160784, 0.164706, 0.2, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -361,16 +363,21 @@ text = "Transparent"
 
 [node name="Fullscreen" type="CheckButton" parent="Toolbar/ToolbarPanel/HBoxContainer"]
 visible = false
-margin_left = 159.0
-margin_right = 305.0
+margin_right = 146.0
 margin_bottom = 40.0
 pressed = true
 text = "Fullscreen"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="AddBasic" type="Button" parent="Toolbar/ToolbarPanel/HBoxContainer"]
+margin_right = 96.0
+margin_bottom = 40.0
+text = "+ Basic Node"
 [connection signal="gui_input" from="GraphEdit" to="." method="_on_GraphEdit_gui_input"]
 [connection signal="scroll_offset_changed" from="GraphEdit" to="." method="_on_GraphEdit_scroll_offset_changed"]
 [connection signal="gui_input" from="Toolbar/ToolbarPanel" to="Toolbar" method="_on_ToolbarPanel_gui_input"]
 [connection signal="toggled" from="Toolbar/ToolbarPanel/HBoxContainer/Transparent" to="." method="_on_Transparent_toggled"]
 [connection signal="toggled" from="Toolbar/ToolbarPanel/HBoxContainer/Fullscreen" to="Toolbar" method="_on_Fullscreen_toggled"]
+[connection signal="pressed" from="Toolbar/ToolbarPanel/HBoxContainer/AddBasic" to="." method="_on_AddBasic_pressed"]

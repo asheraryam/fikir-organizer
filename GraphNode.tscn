@@ -147,7 +147,6 @@ custom_styles/focus = SubResource( 1 )
 custom_styles/normal = SubResource( 1 )
 custom_styles/completion = SubResource( 1 )
 custom_fonts/font = ExtResource( 9 )
-text = "[b]Caption[/b]"
 wrap_enabled = true
 script = ExtResource( 2 )
 min_line = 2

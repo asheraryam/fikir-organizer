@@ -37,10 +37,9 @@ func save_game(project_path = "user://main_project.think"):
 		save_game.store_line(to_json(node_data))
 	save_game.close()
 
-	# Note: This can be called from anywhere inside the tree. This function
+	print("PROJECT SAVED.")
 
 
-# is path independent.
 func load_game(project_path = "user://main_project.think"):
 	CURRENT_PROJECT_PATH = project_path
 	if not CURRENT_PROJECT_PATH or CURRENT_PROJECT_PATH.length()==0:
@@ -77,3 +76,6 @@ func load_game(project_path = "user://main_project.think"):
 		if new_object.has_method("load_more") and node_data["data"]:
 			new_object.call_deferred("load_more",node_data["data"] )
 	save_game.close()
+	
+	print("PROJECT LOADED.")
+	

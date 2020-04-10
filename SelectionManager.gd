@@ -2,7 +2,7 @@ extends Node
 
 
 var current_selected = null
-var ClipBoardUtils = null
+var clipboard = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

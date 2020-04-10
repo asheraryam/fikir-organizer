@@ -8,12 +8,12 @@ var additional_offset := Vector2(80,80)
 var node_index = 0 
 
 var graph_node = load("res://GraphNode.tscn")
-onready var ClipBoardUtils = $Clipboard
+onready var clipboard = $Clipboard
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	get_tree().get_root().set_transparent_background(true) 
-	Selection.ClipBoardUtils = $Clipboard
+	Selection.clipboard = $Clipboard
 
 func _notification(what):
 	if (what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST):
@@ -44,21 +44,21 @@ func _input(event : InputEvent):
 		new_node.init_state()
 		
 		if event.is_action_pressed("paste_from_clipboard"):
-			var image_file_path = ClipBoardUtils.get_image()
+			var image_file_path = clipboard.get_image()
 			if image_file_path:
 				print("Clipboard saved to: " + str(image_file_path))
 				new_node.set_image_from_local(image_file_path)
 			else:
 				new_node.set_link_tools_visible(false)
-				var clip_text = ClipBoardUtils.get_text()
+				var clip_text = clipboard.get_text()
 				new_node.set_text_from_clipboard(clip_text)
 		elif event.is_action_pressed("paste_image_url"):
-			var clip_text = ClipBoardUtils.get_text()
+			var clip_text = clipboard.get_text()
 #			new_node.get_image(OS.clipboard)
 			if clip_text:
 				new_node.get_image(clip_text)
 		elif event.is_action_pressed("paste_url_with_snapshot"):
-			var clip_text = ClipBoardUtils.get_text()
+			var clip_text = clipboard.get_text()
 			if clip_text:
 				new_node.get_snapshot(clip_text)
 		else:
@@ -97,13 +97,13 @@ func _on_GraphEdit_scroll_offset_changed(ofs):
 func _on_GraphEdit_gui_input(event :InputEvent):
 	if event.is_action_pressed("paste"):
 		if is_instance_valid(Selection.current_selected) and Selection.current_selected:
-			add_paste_to_selected()
+			Selection.current_selected.add_paste_to_selected()
 		else:
 			create_node_from_paste()
 	if event is InputEventMouseButton and event.is_pressed():
 		if event.button_index == BUTTON_RIGHT: 
 #			print("Pressed on BG graph")
-			if Selection.current_selected:
+			if is_instance_valid(Selection.current_selected) and Selection.current_selected:
 				print("Deselected node")
 				Selection.current_selected.set_node_selected(false)
 				Selection.current_selected = null
@@ -114,28 +114,7 @@ func _on_GraphEdit_gui_input(event :InputEvent):
 #				Selection.current_selected.set_node_selected(false)
 #				Selection.current_selected = null
 
-func add_paste_to_selected():
-	if not is_instance_valid(Selection.current_selected) or not Selection.current_selected:
-		return
-		
-	# WARNING: This mostly overwrites things
-	var image_file_path = ClipBoardUtils.get_image()
-	if image_file_path:
-		print("Clipboard saved to: " + str(image_file_path))
-		Selection.current_selected.set_image_from_local(image_file_path)
-		Selection.current_selected.set_link_tools_visible(false)
-	else:
-		var clip_text = ClipBoardUtils.get_text()
-		if clip_text:
-			if clip_text.find("http") != -1:
-				Selection.current_selected.text_edit.text = clip_text
-				Selection.current_selected.text_edit.readonly = true
-				Selection.current_selected.get_image(clip_text)
-			else:
-				# paste text if node is empty, or ask insert at cursor
-				pass
-#				Selection.current_selected.set_text_from_clipboard(clip_text)
-#				Selection.current_selected.set_link_tools_visible(false)
+
 	
 func create_node_from_paste():
 	print("Create node from paste")
@@ -153,13 +132,13 @@ func create_node_from_paste():
 	
 	new_node.set_node_empty()
 	new_node.set_link_tools_visible(true)
-	var image_file_path = ClipBoardUtils.get_image()
+	var image_file_path = clipboard.get_image()
 	if image_file_path:
 		print("Clipboard saved to: " + str(image_file_path))
 		new_node.set_image_from_local(image_file_path)
 		new_node.set_link_tools_visible(false)
 	else:
-		var clip_text = ClipBoardUtils.get_text()
+		var clip_text = clipboard.get_text()
 		if clip_text:
 			if clip_text.find("http") != -1:
 				new_node.text_edit.text = clip_text
@@ -177,3 +156,25 @@ func _on_Transparent_toggled(button_pressed):
 	$Background.visible = not button_pressed
 #	ProjectSettings.set_setting("display/window/size/always_on_top", button_pressed)
 #	ProjectSettings.save()
+
+
+func _on_AddBasic_pressed():
+	var new_node : GraphNode = graph_node.instance()
+		
+	new_node.offset += initial_node_position + (
+#			Vector2(int(node_index/5) * additional_offset.x, 
+		Vector2(node_index * additional_offset.x, 
+			(node_index % 5) * additional_offset.y))
+	
+	$GraphEdit.add_child(new_node)
+	
+	new_node._on_Node_raise_request()
+	new_node.set_selected(true)
+	
+	new_node.init_state()
+	
+	new_node.set_link_tools_visible(false)
+		
+	new_node.force_selected()
+	node_index +=1
+

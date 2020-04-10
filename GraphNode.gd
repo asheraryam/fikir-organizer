@@ -77,9 +77,11 @@ func _on_Node_raise_request():
 
 func set_node_selected(is_selected):
 	if is_selected:
+		title = ">> SELECTED"
 		raise()
 		set_rich_text_visible(false)
 	else:
+		title = ""
 		set_selected(false)
 		set_rich_text_visible(true)
 
@@ -131,7 +133,6 @@ func check_for_image(p_url: String = ""):
 				var base_name = url.trim_prefix("http://").trim_prefix("https://")
 				base_name = base_name.split("/")[0]
 				#			title = str(base_name)
-				title = "Image"
 
 
 #				set_node_has_image()
@@ -149,7 +150,6 @@ func _on_TextEdit_text_changed():
 
 
 func set_node_empty():
-	title = "Image"
 	$ImageContainer/TextureRect.texture_normal = null
 	#	$ImageContainer.remove_child(texture_rect)
 	$ImageContainer.hide()
@@ -241,7 +241,7 @@ func set_image_from_local(path):
 	if err != OK:
 		return false
 
-	var new_path: String = "user://" + Selection.ClipBoardUtils.get_formatted_date() + ".png"
+	var new_path: String = "user://" + Selection.clipboard.get_formatted_date() + ".png"
 	print("Saved local image to " + new_path)
 	local_img_cache = new_path
 	texture.get_data().save_png(new_path)
@@ -323,7 +323,7 @@ func _http_request_completed(result, response_code, headers, body):
 			set_node_empty()
 			return
 
-	var new_path: String = "user://" + Selection.ClipBoardUtils.get_formatted_date() + ".png"
+	var new_path: String = "user://" + Selection.clipboard.get_formatted_date() + ".png"
 	print("Saved web image to " + new_path)
 	local_img_cache = new_path
 	image.save_png(new_path)
@@ -411,7 +411,29 @@ func _on_BodyText_gui_input(event):
 			set_selected(true)
 			_on_Node_raise_request()
 			body_textedit.grab_focus()
-
-
-func _on_GraphNode_gui_input(event):
-	pass  # Replace with function body.
+	if event.is_action_pressed("paste"):
+			if is_instance_valid(Selection.current_selected) and Selection.current_selected:
+				Selection.current_selected.add_paste_to_selected()
+				
+func add_paste_to_selected(only_image = false):
+		
+	# WARNING: This mostly overwrites things
+	var image_file_path = Selection.clipboard.get_image()
+	if image_file_path:
+		print("Clipboard saved to: " + str(image_file_path))
+		set_image_from_local(image_file_path)
+		set_link_tools_visible(false)
+	else:
+		if only_image:
+			return
+		var clip_text = Selection.clipboard.get_text()
+		if clip_text:
+			if clip_text.find("http") != -1:
+				text_edit.text = clip_text
+				text_edit.readonly = true
+				get_image(clip_text)
+			else:
+				# paste text if node is empty, or ask insert at cursor
+				pass
+#				Selection.current_selected.set_text_from_clipboard(clip_text)
+#				Selection.current_selected.set_link_tools_visible(false)
