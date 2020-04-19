@@ -26,9 +26,9 @@ func save_game(project_path = "user://main_project.think"):
 	var save_nodes = get_tree().get_nodes_in_group("Persist")
 	for node in save_nodes:
 		# Check the node is an instanced scene so it can be instanced again during load
-		if node.filename.empty():
-			print("persistent node '%s' is not an instanced scene, skipped" % node.name)
-			continue
+#		if node.filename.empty():
+#			print("Note: persistent node '%s' is not an instanced scene" % node.name)
+#			continue
 
 		# Check the node has a save function
 		if ! node.has_method("save"):
