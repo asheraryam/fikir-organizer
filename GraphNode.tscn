@@ -176,7 +176,6 @@ custom_fonts/normal_font = ExtResource( 9 )
 bbcode_enabled = true
 script = ExtResource( 7 )
 [connection signal="close_request" from="." to="." method="_on_Node_close_request"]
-[connection signal="gui_input" from="." to="." method="_on_GraphNode_gui_input"]
 [connection signal="raise_request" from="." to="." method="_on_Node_raise_request"]
 [connection signal="resize_request" from="." to="." method="_on_Node_resize_request"]
 [connection signal="gui_input" from="HBoxContainer/ImageSettings/TextEdit" to="." method="_on_TextEdit_gui_input"]

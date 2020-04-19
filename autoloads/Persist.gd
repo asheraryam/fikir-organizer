@@ -7,6 +7,11 @@ var DEFAULT_PROJECT_PATH = "user://main_project.think"
 func _ready():
 	load_game()
 
+func _input(event):
+	if event.is_action_pressed("quit"):
+		save_game()
+		get_tree().quit()
+
 # Note: This can be called from anywhere inside the tree. This function is
 # path independent.
 # Go through everything in the persist category and ask them to return a
@@ -53,9 +58,9 @@ func load_game(project_path = "user://main_project.think"):
 	# during loading. This will vary wildly depending on the needs of a
 	# project, so take care with this step.
 	# For our example, we will accomplish this by deleting saveable objects.
-	var save_nodes = get_tree().get_nodes_in_group("Persist")
-	for i in save_nodes:
-		i.queue_free()
+#	var save_nodes = get_tree().get_nodes_in_group("Persist")
+#	for i in save_nodes:
+#		i.queue_free()
 
 	# Load the file line by line and process that dictionary to restore
 	# the object it represents.
@@ -63,10 +68,14 @@ func load_game(project_path = "user://main_project.think"):
 	while save_game.get_position() < save_game.get_len():
 		# Get the saved dictionary from the next line in the save file
 		var node_data = parse_json(save_game.get_line())
-
+		
+		var new_object
 		# Firstly, we need to create the object and add it to the tree and set its position.
-		var new_object = load(node_data["filename"]).instance()
-		get_node(node_data["parent"]).add_child(new_object)
+		if "filename" in node_data and "parent" in node_data:
+			new_object = load(node_data["filename"]).instance()
+			get_node(node_data["parent"]).add_child(new_object)
+		elif "path" in node_data:
+			new_object = get_node(node_data["path"])
 
 		# Now we set the remaining variables.
 		for i in node_data.keys():

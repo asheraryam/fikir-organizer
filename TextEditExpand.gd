@@ -44,7 +44,8 @@ func _get_line_spacing():
 
 
 func _get_real_line_count():
-	var line_count = ceil(get_line_count() *2.5) +1
+	var line_count = get_line_count() *1.5
+#	var line_count = ceil(get_line_count() *2.5) +1
 	var lines_to_add = 0
 	var scroll_size = scroll_bar.rect_size.x - 2
 	

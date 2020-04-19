@@ -24,17 +24,11 @@ func _notification(what):
 		
 var last_offset = Vector2(0,0)
 func _input(event : InputEvent):
-#	if event.is_action_released("ui_select"):
-#		print(OS.clipboard)
-	
 	
 	if event.is_action_pressed("node_add_wrapper"):
 		var new_node : GraphNode = graph_node.instance()
 		
-		new_node.offset += initial_node_position + (
-	#			Vector2(int(node_index/5) * additional_offset.x, 
-			Vector2(node_index * additional_offset.x, 
-				(node_index % 5) * additional_offset.y))
+		new_node.offset += get_sequential_offset()
 		
 		$GraphEdit.add_child(new_node)
 		
@@ -80,6 +74,8 @@ func _input(event : InputEvent):
 				if event.button_index == BUTTON_WHEEL_DOWN:
 			#			zoom_pos = get_global_mouse_position()
 					$GraphEdit.zoom -=0.1
+				if event.button_index == BUTTON_MIDDLE:
+					$GraphEdit.zoom = 1
 
 
 #func _process(delta):
@@ -100,30 +96,23 @@ func _on_GraphEdit_gui_input(event :InputEvent):
 			Selection.current_selected.add_paste_to_selected()
 		else:
 			create_node_from_paste()
+	
 	if event is InputEventMouseButton and event.is_pressed():
-		if event.button_index == BUTTON_RIGHT: 
-#			print("Pressed on BG graph")
-			if is_instance_valid(Selection.current_selected) and Selection.current_selected:
-				print("Deselected node")
-				Selection.current_selected.set_node_selected(false)
-				Selection.current_selected = null
-#		if event.button_index == BUTTON_LEFT: 
-##			print("Pressed on BG graph")
-#			if Selection.current_selected:
-#				print("Deselected node")
-#				Selection.current_selected.set_node_selected(false)
-#				Selection.current_selected = null
+		if event.button_index == BUTTON_RIGHT:
+			print("right click add node")
+			add_basic_node(event.position + $GraphEdit.scroll_offset)
 
-
+func get_sequential_offset():
+	return $GraphEdit.scroll_offset + initial_node_position + (
+#			Vector2(int(node_index/5) * additional_offset.x, 
+		Vector2(node_index * additional_offset.x, 
+			(node_index % 5) * additional_offset.y))
 	
 func create_node_from_paste():
 	print("Create node from paste")
 	var new_node : GraphNode = graph_node.instance()
 		
-	new_node.offset += initial_node_position + (
-#			Vector2(int(node_index/5) * additional_offset.x, 
-		Vector2(node_index * additional_offset.x, 
-			(node_index % 5) * additional_offset.y))
+	new_node.offset += get_sequential_offset()
 	
 	$GraphEdit.add_child(new_node)
 	
@@ -159,12 +148,16 @@ func _on_Transparent_toggled(button_pressed):
 
 
 func _on_AddBasic_pressed():
+	add_basic_node()
+
+func add_basic_node(p_offset = Vector2()):
 	var new_node : GraphNode = graph_node.instance()
+	var new_offset = p_offset
+	if not p_offset:
+		new_offset = get_sequential_offset()
+		node_index +=1
 		
-	new_node.offset += initial_node_position + (
-#			Vector2(int(node_index/5) * additional_offset.x, 
-		Vector2(node_index * additional_offset.x, 
-			(node_index % 5) * additional_offset.y))
+	new_node.offset += new_offset
 	
 	$GraphEdit.add_child(new_node)
 	
@@ -176,5 +169,15 @@ func _on_AddBasic_pressed():
 	new_node.set_link_tools_visible(false)
 		
 	new_node.force_selected()
-	node_index +=1
 
+
+
+func _on_GraphEdit_node_selected(node):
+	pass # Replace with function body.
+
+
+func _on_GraphEdit_node_unselected(node):
+	if is_instance_valid(Selection.current_selected) and Selection.current_selected and node == Selection.current_selected:
+		print("Deselected node")
+		Selection.current_selected.set_node_selected(false)
+		Selection.current_selected = null

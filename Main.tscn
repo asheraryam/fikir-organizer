@@ -6,7 +6,7 @@
 [ext_resource path="res://GraphEdit.gd" type="Script" id=4]
 [ext_resource path="res://ClipBoardUtils.cs" type="Script" id=5]
 
-[sub_resource type="StyleBoxEmpty" id=1]
+[sub_resource type="StyleBoxEmpty" id=6]
 
 [sub_resource type="Animation" id=2]
 resource_name = "toolbar_bottom"
@@ -314,12 +314,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GraphEdit" type="GraphEdit" parent="."]
+[node name="GraphEdit" type="GraphEdit" parent="." groups=[
+"Persist",
+]]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 1
 theme = ExtResource( 2 )
-custom_styles/bg = SubResource( 1 )
+custom_styles/bg = SubResource( 6 )
 use_snap = false
 script = ExtResource( 4 )
 __meta__ = {

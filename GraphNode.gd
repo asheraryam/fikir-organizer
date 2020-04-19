@@ -53,6 +53,7 @@ func _on_Node_resized():
 
 func _on_Node_text_changed():
 	pass
+#	update_rich_label_from_textbox()
 
 
 func _on_Node_line_changed(text):
@@ -83,7 +84,7 @@ func set_node_selected(is_selected):
 	else:
 		title = ""
 		set_selected(false)
-		set_rich_text_visible(true)
+#		set_rich_text_visible(true)
 
 
 func set_rich_text_visible(is_visible):
