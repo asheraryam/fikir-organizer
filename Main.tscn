@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Themes/Containers/Graph.tres" type="Theme" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://GraphEdit.gd" type="Script" id=4]
 [ext_resource path="res://ClipBoardUtils.cs" type="Script" id=5]
 [ext_resource path="res://Fonts/OpenSans-Regular.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://Fonts/regular.tres" type="DynamicFont" id=7]
+[ext_resource path="res://Themes/Dialogs/Dialog.tres" type="Theme" id=8]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -286,8 +288,26 @@ tracks/9/keys = {
 "values": [ 0.0, 0.0 ]
 }
 
+[sub_resource type="InputEventAction" id=10]
+action = "add_node"
+pressed = true
+
+[sub_resource type="ShortCut" id=11]
+shortcut = SubResource( 10 )
+
+[sub_resource type="InputEventAction" id=8]
+action = "paste"
+pressed = true
+
+[sub_resource type="ShortCut" id=9]
+shortcut = SubResource( 8 )
+
 [sub_resource type="DynamicFont" id=6]
 size = 30
+font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=7]
+size = 20
 font_data = ExtResource( 6 )
 
 [node name="Main" type="Control"]
@@ -335,6 +355,7 @@ __meta__ = {
 
 [node name="Toolbar" type="Control" parent="."]
 anchor_right = 1.0
+margin_left = 218.0
 margin_bottom = 39.0
 script = ExtResource( 3 )
 __meta__ = {
@@ -351,6 +372,7 @@ anims/toolbar_top = SubResource( 5 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -13.0
+theme = ExtResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -379,9 +401,26 @@ __meta__ = {
 }
 
 [node name="AddBasic" type="Button" parent="Toolbar/ToolbarPanel/HBoxContainer"]
-margin_right = 96.0
+margin_right = 94.0
 margin_bottom = 40.0
+hint_tooltip = "Shortcut: Alt + A
+Add simple node with a text box."
+theme = ExtResource( 8 )
+shortcut_in_tooltip = false
+shortcut = SubResource( 11 )
 text = "+ Basic Node"
+
+[node name="PasteImg" type="Button" parent="Toolbar/ToolbarPanel/HBoxContainer"]
+margin_left = 98.0
+margin_right = 241.0
+margin_bottom = 40.0
+hint_tooltip = "Shortcut: Ctrl + V
+Paste image or text to current selected node.
+If no node is selected, will create a new one."
+theme = ExtResource( 8 )
+shortcut_in_tooltip = false
+shortcut = SubResource( 9 )
+text = "Paste from Clipboard"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Toolbar/ToolbarPanel"]
 anchor_left = 1.0
@@ -394,25 +433,47 @@ __meta__ = {
 }
 
 [node name="Quit" type="Button" parent="Toolbar/ToolbarPanel/HBoxContainer2"]
-margin_right = 87.0
+margin_right = 97.0
 margin_bottom = 40.0
+hint_tooltip = "Save the current project and quit to desktop."
+theme = ExtResource( 8 )
+custom_fonts/font = ExtResource( 7 )
 text = "Save & Quit"
 
 [node name="Title" type="Label" parent="Toolbar/ToolbarPanel"]
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -53.0
+margin_top = -0.614716
 margin_right = 53.0
-margin_bottom = 42.0
+margin_bottom = 41.3853
+hint_tooltip = "made by kotob"
+mouse_filter = 1
 custom_fonts/font = SubResource( 6 )
 text = "Thinker"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="bykotob" type="Label" parent="Toolbar/ToolbarPanel"]
+visible = false
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = 69.943
+margin_top = 8.0
+margin_right = 175.943
+margin_bottom = 50.0
+custom_fonts/font = SubResource( 7 )
+text = "by kotob"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="gui_input" from="GraphEdit" to="." method="_on_GraphEdit_gui_input"]
+[connection signal="node_unselected" from="GraphEdit" to="." method="_on_GraphEdit_node_unselected"]
 [connection signal="scroll_offset_changed" from="GraphEdit" to="." method="_on_GraphEdit_scroll_offset_changed"]
 [connection signal="gui_input" from="Toolbar/ToolbarPanel" to="Toolbar" method="_on_ToolbarPanel_gui_input"]
 [connection signal="toggled" from="Toolbar/ToolbarPanel/HBoxContainer/Transparent" to="." method="_on_Transparent_toggled"]
 [connection signal="toggled" from="Toolbar/ToolbarPanel/HBoxContainer/Fullscreen" to="Toolbar" method="_on_Fullscreen_toggled"]
 [connection signal="pressed" from="Toolbar/ToolbarPanel/HBoxContainer/AddBasic" to="." method="_on_AddBasic_pressed"]
+[connection signal="pressed" from="Toolbar/ToolbarPanel/HBoxContainer/PasteImg" to="." method="_on_PasteImg_pressed"]
 [connection signal="pressed" from="Toolbar/ToolbarPanel/HBoxContainer2/Quit" to="." method="_on_Quit_pressed"]

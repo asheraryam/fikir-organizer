@@ -26,6 +26,7 @@ var last_offset = Vector2(0,0)
 func _input(event : InputEvent):
 	
 	if event.is_action_pressed("node_add_wrapper"):
+		return
 		var new_node : GraphNode = graph_node.instance()
 		
 		new_node.offset += get_sequential_offset()
@@ -186,3 +187,25 @@ func _on_GraphEdit_node_unselected(node):
 func _on_Quit_pressed():
 	persist.save_game()
 	get_tree().quit()
+
+
+func _on_PasteImg_pressed():
+	var new_node : GraphNode = graph_node.instance()
+	
+	new_node.offset += get_sequential_offset()
+	
+	$GraphEdit.add_child(new_node)
+	
+	new_node._on_Node_raise_request()
+	new_node.set_selected(true)
+	
+	new_node.init_state()
+	
+	var image_file_path = clipboard.get_image()
+	if image_file_path:
+		print("Clipboard saved to: " + str(image_file_path))
+		new_node.set_image_from_local(image_file_path)
+	else:
+		new_node.set_link_tools_visible(false)
+		var clip_text = clipboard.get_text()
+		new_node.set_text_from_clipboard(clip_text)

@@ -10,7 +10,23 @@ var PROJECTS_LIST = "user://project_list" + EXTENSION
 var current_project_name = "main_project"
 
 func _ready():
+	setup_directories(DEFAULT_PROJECT_NAME)
 	load_game()
+
+func init_project(project_name):
+	current_project_name = project_name
+	
+	setup_directories(project_name)
+
+func setup_directories(project_name):
+	var directory :Directory= Directory.new()
+	directory.open("user://")
+	if not directory.dir_exists("images"):
+		directory.make_dir("images")
+	
+	directory.open("user://images")
+	if not directory.dir_exists(project_name):
+		directory.make_dir(project_name)
 
 func _input(event):
 	if event.is_action_pressed("quit"):
@@ -37,6 +53,7 @@ func save_game():
 	var err = save_game.open(project_path, File.WRITE)
 	if err != OK:
 		print("Error opening with WRITE %s" % project_path)
+		return ERR_FILE_CANT_WRITE
 	var save_nodes = get_tree().get_nodes_in_group("Persist")
 	for node in save_nodes:
 		# Check the node is an instanced scene so it can be instanced again during load
@@ -57,6 +74,8 @@ func save_game():
 	save_game.close()
 
 	print("PROJECT SAVED - %s" % current_project_name)
+	
+	return OK
 
 
 func load_game(project_name = "main_project"):
@@ -70,7 +89,7 @@ func load_game(project_name = "main_project"):
 	var save_game = File.new()
 	if not save_game.file_exists(project_path):
 		print("Project not found at %s "% project_path)
-		return  # Error! We don't have a save to load.
+		return ERR_FILE_NOT_FOUND # Error! We don't have a save to load.
 		
 
 	# We need to revert the game state so we're not cloning objects
@@ -106,4 +125,6 @@ func load_game(project_name = "main_project"):
 	save_game.close()
 	
 	print("PROJECT LOADED - %s" % current_project_name)
+	
+	return OK
 	

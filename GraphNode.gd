@@ -1,6 +1,8 @@
 extends GraphNode
 
-var API_KEY_THUMBNAILSWS = "ab97c2113e52c3aeca17d5d2b218aa2a4ac169d95308"
+const ENABLE_TOOLS = false
+
+const API_KEY_THUMBNAILSWS = "ab97c2113e52c3aeca17d5d2b218aa2a4ac169d95308"
 export (int) var WEB_SNAPSHOT_WIDTH = 1080  #720
 
 export (Vector2) var MIN_TEX_SIZE := Vector2(160, 160)
@@ -12,7 +14,6 @@ onready var url_label = $HBoxContainer/ImageSettings/URL_Label
 onready var body_textedit = $CaptionContainer/BodyContainer/BodyText
 onready var rich_text = $CaptionContainer/RichTextContainer/RichText
 
-	
 onready var texture_rect: TextureButton = get_node("ImageContainer/TextureRect")
 
 var is_image_local := false
@@ -158,9 +159,8 @@ func set_node_empty():
 	texture_rect.rect_min_size = Vector2(0, 0)
 	rect_size = rect_min_size
 
-
 func set_link_tools_visible(is_visible):
-	if is_visible:
+	if ENABLE_TOOLS and is_visible:
 		$HBoxContainer/ImageSettings.visible = true
 		url_label.visible = false
 		lock_btn.visible = true
@@ -235,6 +235,8 @@ func set_text_from_clipboard(clip_text: String):
 	body_textedit.text = clip_text
 	body_textedit._on_ExpandingText_text_changed()
 
+func get_image_name():
+	return "user://images/"+persist.current_project_name +"/"+ Selection.clipboard.get_formatted_date() + ".png"
 
 func set_image_from_local(path):
 	var texture: ImageTexture = ImageTexture.new()
@@ -242,7 +244,7 @@ func set_image_from_local(path):
 	if err != OK:
 		return false
 
-	var new_path: String = "user://" + Selection.clipboard.get_formatted_date() + ".png"
+	var new_path: String = get_image_name()
 	print("Saved local image to " + new_path)
 	local_img_cache = new_path
 	texture.get_data().save_png(new_path)
@@ -324,7 +326,7 @@ func _http_request_completed(result, response_code, headers, body):
 			set_node_empty()
 			return
 
-	var new_path: String = "user://" + Selection.clipboard.get_formatted_date() + ".png"
+	var new_path: String = get_image_name()
 	print("Saved web image to " + new_path)
 	local_img_cache = new_path
 	image.save_png(new_path)

@@ -13,6 +13,9 @@ func _ready():
 func save():
 	return {
 		"path": get_path(),
+		"use_snap":use_snap,
+		"snap_distance":snap_distance,
+		"zoom":zoom,
 		"data": {
 		"offset_x" :scroll_offset.x, 
 		"offset_y" :scroll_offset.y, }
