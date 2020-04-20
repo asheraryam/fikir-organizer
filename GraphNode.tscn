@@ -127,6 +127,7 @@ margin_right = 255.0
 margin_bottom = 101.0
 
 [node name="BodyContainer" type="MarginContainer" parent="CaptionContainer"]
+visible = false
 margin_right = 245.0
 margin_bottom = 40.0
 grow_horizontal = 2
@@ -153,7 +154,6 @@ min_line = 2
 max_line = 20
 
 [node name="RichTextContainer" type="MarginContainer" parent="CaptionContainer"]
-visible = false
 margin_right = 245.0
 margin_bottom = 40.0
 
@@ -187,5 +187,6 @@ script = ExtResource( 7 )
 [connection signal="gui_input" from="CaptionContainer/BodyContainer/BodyText" to="." method="_on_BodyText_gui_input"]
 [connection signal="mouse_exited" from="CaptionContainer/BodyContainer/BodyText" to="." method="_on_CaptionContainer_mouse_exited"]
 [connection signal="text_changed" from="CaptionContainer/BodyContainer/BodyText" to="CaptionContainer/BodyContainer/BodyText" method="_on_ExpandingText_text_changed"]
+[connection signal="text_changed" from="CaptionContainer/BodyContainer/BodyText" to="." method="_on_BodyText_text_changed"]
 [connection signal="gui_input" from="CaptionContainer/RichTextContainer/RichText" to="." method="_on_RichText_gui_input"]
 [connection signal="mouse_entered" from="CaptionContainer/RichTextContainer/RichText" to="." method="_on_CaptionContainer_mouse_entered"]

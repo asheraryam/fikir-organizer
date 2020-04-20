@@ -85,7 +85,7 @@ func set_node_selected(is_selected):
 	else:
 		title = ""
 		set_selected(false)
-#		set_rich_text_visible(true)
+		set_rich_text_visible(true)
 
 
 func set_rich_text_visible(is_visible):
@@ -103,6 +103,7 @@ func set_rich_text_visible(is_visible):
 func update_rich_label_from_textbox():
 	rich_text.bbcode_text = body_textedit.text
 	rich_text.rect_min_size = body_textedit.rect_size
+#	print("Rich text updated %s" % rich_text.bbcode_text)
 
 
 #	rich_text.rect_min_size.x = body_textedit.rect_size.x
@@ -382,6 +383,8 @@ func load_more(data):
 				set_image_from_local(image_path, false)
 			else:
 				get_image(image_path)
+				
+	update_rich_label_from_textbox()
 	
 
 
@@ -398,14 +401,8 @@ func _on_CaptionContainer_mouse_entered():
 	return
 
 
-#	set_rich_text_visible(false)
-
-
 func _on_CaptionContainer_mouse_exited():
 	return
-
-
-#	set_rich_text_visible(true)
 
 
 func _on_BodyText_gui_input(event):
@@ -441,3 +438,7 @@ func add_paste_to_selected(only_image = false):
 				pass
 #				Selection.current_selected.set_text_from_clipboard(clip_text)
 #				Selection.current_selected.set_link_tools_visible(false)
+
+
+func _on_BodyText_text_changed():
+	update_rich_label_from_textbox()
