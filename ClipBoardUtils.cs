@@ -8,6 +8,8 @@ using System.Drawing.Imaging;
 public class ClipBoardUtils : Node
 {
 	// Member variables here, example:
+	
+	public String current_project_name ="none";
 
 	//Random rnd = new Random();
 	
@@ -28,7 +30,7 @@ public class ClipBoardUtils : Node
 	public String get_image(){
 		var random_base_name = get_formatted_date();
 		//var random_base_name = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() +"_"+ rnd.Next().ToString();
-		var file_name = $@"{OS.GetUserDataDir()}\{random_base_name}.png";
+		var file_name = $@"{OS.GetUserDataDir()}\images\{current_project_name}\{random_base_name}.png";
 
 		//if (Clipboard.ContainsImage())
 		//{

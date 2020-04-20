@@ -238,16 +238,17 @@ func set_text_from_clipboard(clip_text: String):
 func get_image_name():
 	return "user://images/"+persist.current_project_name +"/"+ Selection.clipboard.get_formatted_date() + ".png"
 
-func set_image_from_local(path):
+func set_image_from_local(path, save = true):
 	var texture: ImageTexture = ImageTexture.new()
 	var err = texture.load(path)
 	if err != OK:
 		return false
 
-	var new_path: String = get_image_name()
-	print("Saved local image to " + new_path)
-	local_img_cache = new_path
-	texture.get_data().save_png(new_path)
+	if save:
+		var new_path: String = get_image_name()
+		print("Saved local image to " + new_path)
+		local_img_cache = new_path
+		texture.get_data().save_png(new_path)
 	
 	is_image_local = true
 	image_show_success(texture, path)
@@ -378,7 +379,7 @@ func load_more(data):
 	if not fetched_image_cache:
 		if image_path:
 			if is_image_local:
-				set_image_from_local(image_path)
+				set_image_from_local(image_path, false)
 			else:
 				get_image(image_path)
 	
@@ -415,8 +416,8 @@ func _on_BodyText_gui_input(event):
 			_on_Node_raise_request()
 			body_textedit.grab_focus()
 	if event.is_action_pressed("paste"):
-			if is_instance_valid(Selection.current_selected) and Selection.current_selected:
-				Selection.current_selected.add_paste_to_selected()
+		if is_instance_valid(Selection.current_selected) and Selection.current_selected:
+			Selection.current_selected.add_paste_to_selected()
 				
 func add_paste_to_selected(only_image = false):
 		
@@ -424,7 +425,7 @@ func add_paste_to_selected(only_image = false):
 	var image_file_path = Selection.clipboard.get_image()
 	if image_file_path:
 		print("Clipboard saved to: " + str(image_file_path))
-		set_image_from_local(image_file_path)
+		set_image_from_local(image_file_path, false)
 		set_link_tools_visible(false)
 	else:
 		if only_image:

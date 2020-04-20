@@ -14,6 +14,8 @@ onready var clipboard = $Clipboard
 func _ready():
 	get_tree().get_root().set_transparent_background(true) 
 	Selection.clipboard = $Clipboard
+	
+	$Clipboard.current_project_name = persist.current_project_name
 
 func _notification(what):
 	if (what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST):
@@ -25,42 +27,42 @@ func _notification(what):
 var last_offset = Vector2(0,0)
 func _input(event : InputEvent):
 	
-	if event.is_action_pressed("node_add_wrapper"):
-		return
-		var new_node : GraphNode = graph_node.instance()
-		
-		new_node.offset += get_sequential_offset()
-		
-		$GraphEdit.add_child(new_node)
-		
-		new_node._on_Node_raise_request()
-		new_node.set_selected(true)
-		
-		new_node.init_state()
-		
-		if event.is_action_pressed("paste_from_clipboard"):
-			var image_file_path = clipboard.get_image()
-			if image_file_path:
-				print("Clipboard saved to: " + str(image_file_path))
-				new_node.set_image_from_local(image_file_path)
-			else:
-				new_node.set_link_tools_visible(false)
-				var clip_text = clipboard.get_text()
-				new_node.set_text_from_clipboard(clip_text)
-		elif event.is_action_pressed("paste_image_url"):
-			var clip_text = clipboard.get_text()
-#			new_node.get_image(OS.clipboard)
-			if clip_text:
-				new_node.get_image(clip_text)
-		elif event.is_action_pressed("paste_url_with_snapshot"):
-			var clip_text = clipboard.get_text()
-			if clip_text:
-				new_node.get_snapshot(clip_text)
-		else:
-			new_node.set_link_tools_visible(false)
-			
-		new_node.force_selected()
-		node_index +=1
+#	if event.is_action_pressed("node_add_wrapper"):
+#		return
+#		var new_node : GraphNode = graph_node.instance()
+#
+#		new_node.offset += get_sequential_offset()
+#
+#		$GraphEdit.add_child(new_node)
+#
+#		new_node._on_Node_raise_request()
+#		new_node.set_selected(true)
+#
+#		new_node.init_state()
+#
+#		if event.is_action_pressed("paste_from_clipboard"):
+#			var image_file_path = clipboard.get_image()
+#			if image_file_path:
+#				print("Clipboard saved to: " + str(image_file_path))
+#				new_node.set_image_from_local(image_file_path)
+#			else:
+#				new_node.set_link_tools_visible(false)
+#				var clip_text = clipboard.get_text()
+#				new_node.set_text_from_clipboard(clip_text)
+#		elif event.is_action_pressed("paste_image_url"):
+#			var clip_text = clipboard.get_text()
+##			new_node.get_image(OS.clipboard)
+#			if clip_text:
+#				new_node.get_image(clip_text)
+#		elif event.is_action_pressed("paste_url_with_snapshot"):
+#			var clip_text = clipboard.get_text()
+#			if clip_text:
+#				new_node.get_snapshot(clip_text)
+#		else:
+#			new_node.set_link_tools_visible(false)
+#
+#		new_node.force_selected()
+#		node_index +=1
 	
 	if event.is_pressed():
 		if event is InputEventKey:
@@ -125,7 +127,7 @@ func create_node_from_paste():
 	var image_file_path = clipboard.get_image()
 	if image_file_path:
 		print("Clipboard saved to: " + str(image_file_path))
-		new_node.set_image_from_local(image_file_path)
+		new_node.set_image_from_local(image_file_path, false)
 		new_node.set_link_tools_visible(false)
 	else:
 		var clip_text = clipboard.get_text()
@@ -190,22 +192,7 @@ func _on_Quit_pressed():
 
 
 func _on_PasteImg_pressed():
-	var new_node : GraphNode = graph_node.instance()
-	
-	new_node.offset += get_sequential_offset()
-	
-	$GraphEdit.add_child(new_node)
-	
-	new_node._on_Node_raise_request()
-	new_node.set_selected(true)
-	
-	new_node.init_state()
-	
-	var image_file_path = clipboard.get_image()
-	if image_file_path:
-		print("Clipboard saved to: " + str(image_file_path))
-		new_node.set_image_from_local(image_file_path)
+	if is_instance_valid(Selection.current_selected) and Selection.current_selected:
+		Selection.current_selected.add_paste_to_selected()
 	else:
-		new_node.set_link_tools_visible(false)
-		var clip_text = clipboard.get_text()
-		new_node.set_text_from_clipboard(clip_text)
+		create_node_from_paste()
