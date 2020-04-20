@@ -20,7 +20,7 @@ public class ClipBoardUtils : Node
 	{
 		// Called every time the node is added to the scene.
 		// Initialization here.
-		GD.Print("Hello from C# to Godot :)");
+		GD.Print("Loaded C# module.");
 		
 		
 	}

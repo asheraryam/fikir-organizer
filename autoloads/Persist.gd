@@ -1,8 +1,13 @@
 extends Node
 
-var CURRENT_PROJECT_PATH = ""
+var EXTENSION = ".think"
+var DEFAULT_PROJECT_NAME = "main_project"
 
-var DEFAULT_PROJECT_PATH = "user://main_project.think"
+var FOLDER_PROJECTS = "projects"
+var DIR_PROJECTS = "user://"+ FOLDER_PROJECTS + "/"
+var PROJECTS_LIST = "user://project_list" + EXTENSION
+
+var current_project_name = "main_project"
 
 func _ready():
 	load_game()
@@ -16,13 +21,22 @@ func _input(event):
 # path independent.
 # Go through everything in the persist category and ask them to return a
 # dict of relevant variables
-func save_game(project_path = "user://main_project.think"):
-	CURRENT_PROJECT_PATH = project_path
-	if not CURRENT_PROJECT_PATH or CURRENT_PROJECT_PATH.length()==0:
-		CURRENT_PROJECT_PATH = DEFAULT_PROJECT_PATH
+func save_game():
+	if not current_project_name or current_project_name.length()==0:
+		 current_project_name = DEFAULT_PROJECT_NAME
+		
+	var project_path = DIR_PROJECTS + current_project_name + EXTENSION
+	
+	var directory :Directory= Directory.new()
+	directory.open("user://")
+	if not directory.dir_exists(FOLDER_PROJECTS):
+		print("Create new dir %s" % FOLDER_PROJECTS)
+		directory.make_dir(FOLDER_PROJECTS)
 		
 	var save_game = File.new()
-	save_game.open(CURRENT_PROJECT_PATH, File.WRITE)
+	var err = save_game.open(project_path, File.WRITE)
+	if err != OK:
+		print("Error opening with WRITE %s" % project_path)
 	var save_nodes = get_tree().get_nodes_in_group("Persist")
 	for node in save_nodes:
 		# Check the node is an instanced scene so it can be instanced again during load
@@ -31,7 +45,7 @@ func save_game(project_path = "user://main_project.think"):
 #			continue
 
 		# Check the node has a save function
-		if ! node.has_method("save"):
+		if not node.has_method("save"):
 			print("persistent node '%s' is missing a save() function, skipped" % node.name)
 			continue
 
@@ -42,17 +56,22 @@ func save_game(project_path = "user://main_project.think"):
 		save_game.store_line(to_json(node_data))
 	save_game.close()
 
-	print("PROJECT SAVED.")
+	print("PROJECT SAVED - %s" % current_project_name)
 
 
-func load_game(project_path = "user://main_project.think"):
-	CURRENT_PROJECT_PATH = project_path
-	if not CURRENT_PROJECT_PATH or CURRENT_PROJECT_PATH.length()==0:
-		CURRENT_PROJECT_PATH = DEFAULT_PROJECT_PATH
+func load_game(project_name = "main_project"):
+	current_project_name = project_name
+	
+	if not current_project_name or current_project_name.length()==0:
+		 current_project_name = DEFAULT_PROJECT_NAME
+		
+	var project_path = DIR_PROJECTS + current_project_name + EXTENSION
 		
 	var save_game = File.new()
-	if not save_game.file_exists(CURRENT_PROJECT_PATH):
+	if not save_game.file_exists(project_path):
+		print("Project not found at %s "% project_path)
 		return  # Error! We don't have a save to load.
+		
 
 	# We need to revert the game state so we're not cloning objects
 	# during loading. This will vary wildly depending on the needs of a
@@ -64,7 +83,7 @@ func load_game(project_path = "user://main_project.think"):
 
 	# Load the file line by line and process that dictionary to restore
 	# the object it represents.
-	save_game.open(CURRENT_PROJECT_PATH, File.READ)
+	save_game.open(project_path, File.READ)
 	while save_game.get_position() < save_game.get_len():
 		# Get the saved dictionary from the next line in the save file
 		var node_data = parse_json(save_game.get_line())
@@ -86,5 +105,5 @@ func load_game(project_path = "user://main_project.think"):
 			new_object.call_deferred("load_more",node_data["data"] )
 	save_game.close()
 	
-	print("PROJECT LOADED.")
+	print("PROJECT LOADED - %s" % current_project_name)
 	
