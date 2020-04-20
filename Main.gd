@@ -181,3 +181,8 @@ func _on_GraphEdit_node_unselected(node):
 		print("Deselected node")
 		Selection.current_selected.set_node_selected(false)
 		Selection.current_selected = null
+
+
+func _on_Quit_pressed():
+	persist.save_game()
+	get_tree().quit()
