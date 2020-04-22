@@ -8,9 +8,14 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "RichTextLabel",
+"class": "ExpandingRichTextLabel",
+"language": "GDScript",
+"path": "res://Nodes/ExpandingRichTextLabel.gd"
+} ]
 _global_script_class_icons={
-
+"ExpandingRichTextLabel": ""
 }
 
 [application]

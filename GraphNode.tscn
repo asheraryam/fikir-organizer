@@ -6,7 +6,7 @@
 [ext_resource path="res://Themes/Dialogs/Dialog.tres" type="Theme" id=4]
 [ext_resource path="res://Themes/Nodes/Normal/Option.tres" type="StyleBox" id=5]
 [ext_resource path="res://Themes/Nodes/Normal/Expression.tres" type="StyleBox" id=6]
-[ext_resource path="res://RichTextExpand.gd" type="Script" id=7]
+[ext_resource path="res://Nodes/ExpandingRichTextLabel.gd" type="Script" id=7]
 [ext_resource path="res://Fonts/italics.tres" type="DynamicFont" id=8]
 [ext_resource path="res://Fonts/regular.tres" type="DynamicFont" id=9]
 [ext_resource path="res://Fonts/boldItalics.tres" type="DynamicFont" id=10]
@@ -126,6 +126,29 @@ margin_top = 61.0
 margin_right = 255.0
 margin_bottom = 101.0
 
+[node name="RichTextContainer" type="MarginContainer" parent="CaptionContainer"]
+margin_right = 245.0
+margin_bottom = 40.0
+
+[node name="RichText" type="RichTextLabel" parent="CaptionContainer/RichTextContainer"]
+margin_right = 245.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 160, 40 )
+focus_neighbour_left = NodePath("../HBoxContainer/TextEdit")
+focus_neighbour_top = NodePath("../HBoxContainer/TextEdit")
+focus_neighbour_right = NodePath("../HBoxContainer/TextEdit")
+focus_neighbour_bottom = NodePath("../HBoxContainer/TextEdit")
+focus_next = NodePath("../HBoxContainer/TextEdit")
+focus_previous = NodePath("../HBoxContainer/TextEdit")
+custom_styles/focus = SubResource( 1 )
+custom_styles/normal = SubResource( 1 )
+custom_fonts/bold_italics_font = ExtResource( 10 )
+custom_fonts/italics_font = ExtResource( 8 )
+custom_fonts/bold_font = ExtResource( 11 )
+custom_fonts/normal_font = ExtResource( 9 )
+bbcode_enabled = true
+script = ExtResource( 7 )
+
 [node name="BodyContainer" type="MarginContainer" parent="CaptionContainer"]
 visible = false
 margin_right = 245.0
@@ -152,29 +175,6 @@ wrap_enabled = true
 script = ExtResource( 2 )
 min_line = 2
 max_line = 20
-
-[node name="RichTextContainer" type="MarginContainer" parent="CaptionContainer"]
-margin_right = 245.0
-margin_bottom = 40.0
-
-[node name="RichText" type="RichTextLabel" parent="CaptionContainer/RichTextContainer"]
-margin_right = 245.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 160, 40 )
-focus_neighbour_left = NodePath("../HBoxContainer/TextEdit")
-focus_neighbour_top = NodePath("../HBoxContainer/TextEdit")
-focus_neighbour_right = NodePath("../HBoxContainer/TextEdit")
-focus_neighbour_bottom = NodePath("../HBoxContainer/TextEdit")
-focus_next = NodePath("../HBoxContainer/TextEdit")
-focus_previous = NodePath("../HBoxContainer/TextEdit")
-custom_styles/focus = SubResource( 1 )
-custom_styles/normal = SubResource( 1 )
-custom_fonts/bold_italics_font = ExtResource( 10 )
-custom_fonts/italics_font = ExtResource( 8 )
-custom_fonts/bold_font = ExtResource( 11 )
-custom_fonts/normal_font = ExtResource( 9 )
-bbcode_enabled = true
-script = ExtResource( 7 )
 [connection signal="close_request" from="." to="." method="_on_Node_close_request"]
 [connection signal="raise_request" from="." to="." method="_on_Node_raise_request"]
 [connection signal="resize_request" from="." to="." method="_on_Node_resize_request"]
@@ -184,9 +184,9 @@ script = ExtResource( 7 )
 [connection signal="toggled" from="HBoxContainer/ImageSettings/LockButton" to="." method="_on_LockButton_toggled"]
 [connection signal="mouse_entered" from="CaptionContainer" to="." method="_on_CaptionContainer_mouse_entered"]
 [connection signal="mouse_exited" from="CaptionContainer" to="." method="_on_CaptionContainer_mouse_exited"]
-[connection signal="gui_input" from="CaptionContainer/BodyContainer/BodyText" to="." method="_on_BodyText_gui_input"]
-[connection signal="mouse_exited" from="CaptionContainer/BodyContainer/BodyText" to="." method="_on_CaptionContainer_mouse_exited"]
-[connection signal="text_changed" from="CaptionContainer/BodyContainer/BodyText" to="CaptionContainer/BodyContainer/BodyText" method="_on_ExpandingText_text_changed"]
-[connection signal="text_changed" from="CaptionContainer/BodyContainer/BodyText" to="." method="_on_BodyText_text_changed"]
 [connection signal="gui_input" from="CaptionContainer/RichTextContainer/RichText" to="." method="_on_RichText_gui_input"]
 [connection signal="mouse_entered" from="CaptionContainer/RichTextContainer/RichText" to="." method="_on_CaptionContainer_mouse_entered"]
+[connection signal="gui_input" from="CaptionContainer/BodyContainer/BodyText" to="." method="_on_BodyText_gui_input"]
+[connection signal="mouse_exited" from="CaptionContainer/BodyContainer/BodyText" to="." method="_on_CaptionContainer_mouse_exited"]
+[connection signal="text_changed" from="CaptionContainer/BodyContainer/BodyText" to="." method="_on_BodyText_text_changed"]
+[connection signal="text_changed" from="CaptionContainer/BodyContainer/BodyText" to="CaptionContainer/BodyContainer/BodyText" method="_on_ExpandingText_text_changed"]
