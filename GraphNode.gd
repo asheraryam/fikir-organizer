@@ -28,7 +28,8 @@ func _ready():
 		texture_rect = load("res://ImageTextureRect.tscn").instance()
 
 	http_request.connect("request_completed", self, "_http_request_completed")
-
+	
+	set_rich_text_visible(true)
 	texture_rect.connect("pressed", self, "_on_TextureRect_pressed")
 
 
@@ -102,7 +103,7 @@ func set_rich_text_visible(is_visible):
 
 func update_rich_label_from_textbox():
 	rich_text.bbcode_text = body_textedit.text
-	print("Update RTL with %s" % rich_text.bbcode_text)
+#	print("Update RTL with %s" % rich_text.bbcode_text)
 #	body_textedit.rect_size = rich_text.rect_size
 #	rich_text.rect_min_size = body_textedit.rect_size
 #	print("Rich text updated %s" % rich_text.bbcode_text)
