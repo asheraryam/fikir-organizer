@@ -1,6 +1,6 @@
 [gd_scene load_steps=16 format=2]
 
-[ext_resource path="res://ClipBoardUtils.cs" type="Script" id=1]
+[ext_resource path="res://core/csharp/ClipBoardUtils.cs" type="Script" id=1]
 [ext_resource path="res://core/Toolbar.gd" type="Script" id=2]
 [ext_resource path="res://core/GraphEdit.gd" type="Script" id=3]
 [ext_resource path="res://core/Main.gd" type="Script" id=4]
@@ -8,7 +8,6 @@
 [ext_resource path="res://Themes/Containers/Graph.tres" type="Theme" id=6]
 [ext_resource path="res://Themes/Fonts/OpenSans-Regular.ttf" type="DynamicFontData" id=7]
 [ext_resource path="res://Themes/Fonts/regular.tres" type="DynamicFont" id=8]
-
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
