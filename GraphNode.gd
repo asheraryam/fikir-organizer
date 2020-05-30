@@ -199,12 +199,17 @@ func _on_Scale_Size_Button_toggled(button_pressed):
 
 func _on_TextureRect_pressed():
 	if texture_rect.expand:
-		if texture_rect.texture_normal:
-			texture_rect.expand = false
+		set_texture_rect_expand(false)
 	else:
+		set_texture_rect_expand(true)
+
+func set_texture_rect_expand(expand):
+	if expand:
 		texture_rect.expand = true
 		rect_size = rect_min_size
-
+	else:
+		if texture_rect.texture_normal:
+			texture_rect.expand = false
 
 func _on_LockButton_toggled(button_pressed):
 	text_edit.readonly = button_pressed
@@ -355,12 +360,17 @@ func save():
 		"image_path": image_path,
 		"is_image_local": is_image_local,
 		"local_img_cache": local_img_cache,
-		"rect_size": rect_size,
-		"rect_min_size": rect_min_size,
-		"rect_position": rect_position,
 		"data": {"text_body": body_textedit.text,
-		"offset_x" :offset.x, 
-		"offset_y" :offset.y, }
+			"offset_x" :offset.x, 
+			"offset_y" :offset.y,
+			"texture_size": var2str(texture_rect.rect_min_size),
+			"texture_expand": var2str(texture_rect.expand),
+			"str2var":{
+					"rect_size": var2str(rect_size),
+					"rect_min_size": var2str(rect_min_size),
+					"rect_position": var2str(rect_position),
+				}
+		 }
 	}
 
 
@@ -376,10 +386,12 @@ func load_more(data):
 	body_textedit.text = data["text_body"]
 	body_textedit._on_ExpandingText_text_changed()
 	
+	update_rich_label_from_textbox()
+
 	var fetched_image_cache = false
 	if local_img_cache:
 		fetched_image_cache = fetch_cached_image(local_img_cache)
-	
+		
 	if not fetched_image_cache:
 		if image_path:
 			if is_image_local:
@@ -387,7 +399,18 @@ func load_more(data):
 			else:
 				get_image(image_path)
 				
-	update_rich_label_from_textbox()
+	if "str2var" in data:
+		for i in data["str2var"].keys():
+			set(i, str2var(data["str2var"][i]))
+	
+#	_on_Node_resize_request(rect_min_size)
+	if "texture_expand" in data:
+		set_texture_rect_expand(str2var(data["texture_expand"]))
+	if "texture_size" in data:
+		var tmp_size = str2var(data["texture_size"])
+		if tmp_size is Vector2:
+			texture_rect.rect_min_size = tmp_size
+				
 	
 
 
