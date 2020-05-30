@@ -27,7 +27,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Selection="*res://SelectionManager.gd"
+Selection="*res://core/SelectionManager.gd"
 persist="*res://autoloads/Persist.gd"
 
 [display]

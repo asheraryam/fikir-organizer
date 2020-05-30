@@ -2,12 +2,10 @@ extends GraphNode
 
 const ENABLE_TOOLS = false
 
-const API_KEY_THUMBNAILSWS = "ab97c2113e52c3aeca17d5d2b218aa2a4ac169d95308"
-export (int) var WEB_SNAPSHOT_WIDTH = 1080  #720
 
 export (Vector2) var MIN_TEX_SIZE := Vector2(160, 160)
 
-onready var http_request := $HTTPRequest
+
 onready var text_edit = $HBoxContainer/ImageSettings/TextEdit
 onready var lock_btn = $HBoxContainer/ImageSettings/LockButton
 onready var url_label = $HBoxContainer/ImageSettings/URL_Label
@@ -16,22 +14,25 @@ onready var rich_text = $CaptionContainer/RichTextContainer/RichText
 
 onready var texture_rect: TextureButton = get_node("ImageContainer/TextureRect")
 
-var is_image_local := false
-var image_path := ""
-var local_img_cache := ""
-
-var _last_requested_link := ""
-
 
 func _ready():
+	set_image_loader()
 	if not texture_rect:
 		texture_rect = load("res://ImageTextureRect.tscn").instance()
 
-	http_request.connect("request_completed", self, "_http_request_completed")
 	
 	set_rich_text_visible(true)
 	texture_rect.connect("pressed", self, "_on_TextureRect_pressed")
 
+var image_loader
+func set_image_loader():
+	if has_node("ImageLoader"):
+		image_loader = get_node("ImageLoader")
+	else:
+		image_loader = load("core/ImageLoader.tscn").instance()
+		image_loader.name = "ImageLoader"
+		add_child(image_loader)
+	
 
 func _on_Node_resize_request(new_minsize):
 	if texture_rect.rect_min_size.x > 0:
@@ -124,28 +125,6 @@ func _on_TextEdit_gui_input(event: InputEvent):
 		call_deferred("check_for_image")
 
 
-func check_for_image(p_url: String = ""):
-	var url
-	if p_url and p_url.length() > 0:
-		url = p_url
-	else:
-		url = text_edit.text.trim_suffix("\n")
-	if url:
-		var is_local = set_image_from_local(url)
-		if not is_local:
-			print("Local path not found, attempt to fetch URL.")
-			var success = get_image(url)
-			if success:
-				var base_name = url.trim_prefix("http://").trim_prefix("https://")
-				base_name = base_name.split("/")[0]
-				#			title = str(base_name)
-
-
-#				set_node_has_image()
-#			else:
-#				set_node_empty()
-#	else:
-#		set_node_empty()
 
 
 func _on_TextEdit_text_changed():
@@ -214,69 +193,17 @@ func set_texture_rect_expand(expand):
 func _on_LockButton_toggled(button_pressed):
 	text_edit.readonly = button_pressed
 
-func get_snapshot(url: String):
-	var thing = (
-		"https://api.thumbnail.ws/api/"
-		+ API_KEY_THUMBNAILSWS
-		+ "/thumbnail/get?url="
-		+ url.percent_encode()
-		+ "&width="
-		+ str(WEB_SNAPSHOT_WIDTH).percent_encode()
-	)
-	_last_requested_link = thing
-	is_image_local = false
-
-	print(thing)
-
-	var error = http_request.request(thing)
-	if error != OK:
-		#	push_error("An error occurred in the HTTP request.")
-		set_node_empty()
-		return false
-
-	text_edit.text = url
-	set_node_has_image()
-	return true
-
-
 func set_text_from_clipboard(clip_text: String):
 	print("Set text edit from clipboard" + clip_text)
 	body_textedit.text = clip_text
 	body_textedit._on_ExpandingText_text_changed()
 
-func get_image_name():
-	return "user://images/"+persist.current_project_name +"/"+ Selection.clipboard.get_formatted_date() + ".png"
 
-func set_image_from_local(path, save = true):
-	var texture: ImageTexture = ImageTexture.new()
-	var err = texture.load(path)
-	if err != OK:
-		return false
-
-	if save:
-		var new_path: String = get_image_name()
-		print("Saved local image to " + new_path)
-		local_img_cache = new_path
-		texture.get_data().save_png(new_path)
-	
-	is_image_local = true
-	image_show_success(texture, path)
-	return true
-
-func fetch_cached_image(path):
-	var texture: ImageTexture = ImageTexture.new()
-	var err = texture.load(path)
-	if err != OK:
-		return false
-	
-	image_show_success(texture, image_path)
-	
-	print("Load image from cache: %s"% path)
-	return true
-
+func get_text_in_box():
+	return text_edit.text
 
 func image_show_success(texture, path):
-	image_path = path
+	image_loader.image_path = path
 
 	text_edit.text = path
 	texture_rect.texture_normal = texture
@@ -288,61 +215,6 @@ func image_show_success(texture, path):
 		set_node_has_image()
 	else:
 		set_node_empty()
-
-
-func get_image(url: String):
-	if url.find("gyazo.com") != -1 and url.find("i.gyazo.com") == -1:
-		print("Fixing gyazo link")
-		url.replace("gyazo.com", "i.gyazo.com")
-		url += ".png"
-	elif url.find("imgur.com") != -1 and url.find("i.imgur.com") == -1:
-		print("Fixing imgur link")
-		url.replace("imgur.com", "i.imgur.com")
-		url += ".png"
-
-	_last_requested_link = url
-	is_image_local = false
-
-	var http_stat = http_request.get_http_client_status()
-	if http_stat != HTTPClient.STATUS_CONNECTING and http_stat != HTTPClient.STATUS_RESOLVING:
-		var error = http_request.request(url)
-		if error != OK:
-			#	push_error("An error occurred in the HTTP request.")
-			#			set_node_empty()
-			return false
-
-		text_edit.text = url
-		text_edit.readonly = true
-		#		set_node_has_image()
-		return true
-
-	#	set_node_empty()
-	return false
-
-
-# Called when the HTTP request is completed.
-func _http_request_completed(result, response_code, headers, body):
-	var image := Image.new()
-
-	print("Fetched image")
-	var texture: ImageTexture = ImageTexture.new()
-
-	var error = image.load_png_from_buffer(body)
-	if error != OK:
-		push_error("Couldn't load png image, trying as jpg.")
-		var image_error = image.load_jpg_from_buffer(body)
-		if image_error != OK:
-			push_error("Couldn't load jpg image.")
-			set_node_empty()
-			return
-
-	var new_path: String = get_image_name()
-	print("Saved web image to " + new_path)
-	local_img_cache = new_path
-	image.save_png(new_path)
-	texture.create_from_image(image)
-
-	image_show_success(texture, _last_requested_link)
 
 
 func _on_Node_close_request():
@@ -357,12 +229,13 @@ func save():
 	return {
 		"filename": get_filename(),
 		"parent": get_parent().get_path(),
-		"image_path": image_path,
-		"is_image_local": is_image_local,
-		"local_img_cache": local_img_cache,
+
 		"data": {"text_body": body_textedit.text,
 			"offset_x" :offset.x, 
 			"offset_y" :offset.y,
+			"image_path": image_loader.image_path,
+			"is_image_local": image_loader.is_image_local,
+			"local_img_cache": image_loader.local_img_cache,
 			"texture_size": var2str(texture_rect.rect_min_size),
 			"texture_expand": var2str(texture_rect.expand),
 			"str2var":{
@@ -375,6 +248,14 @@ func save():
 
 
 func load_more(data):
+	
+	if "image_path" in data:
+		image_loader.image_path = data["image_path"]
+	if "is_image_local" in data:
+		image_loader.is_image_local = data["is_image_local"]
+	if "local_img_cache" in data:
+		image_loader.local_img_cache = data["local_img_cache"]
+			
 	init_state()
 	
 	set_link_tools_visible(false)
@@ -384,17 +265,7 @@ func load_more(data):
 	if "offset_x" in data:
 		offset.y = data["offset_y"]
 
-
-	var fetched_image_cache = false
-	if local_img_cache:
-		fetched_image_cache = fetch_cached_image(local_img_cache)
-		
-	if not fetched_image_cache:
-		if image_path:
-			if is_image_local:
-				set_image_from_local(image_path, false)
-			else:
-				get_image(image_path)
+	image_loader.load_image_from_persistance()
 				
 	if "str2var" in data:
 		for i in data["str2var"].keys():
@@ -407,7 +278,7 @@ func load_more(data):
 		update_rich_label_from_textbox()
 	
 #	_on_Node_resize_request(rect_min_size)
-	if image_path:
+	if image_loader.image_path:
 		if "texture_expand" in data:
 			set_texture_rect_expand(str2var(data["texture_expand"]))
 		if "texture_size" in data:
@@ -452,7 +323,7 @@ func add_paste_to_selected(only_image = false):
 	var image_file_path = Selection.clipboard.get_image()
 	if image_file_path:
 		print("Clipboard saved to: " + str(image_file_path))
-		set_image_from_local(image_file_path, false)
+		image_loader.set_image_from_local(image_file_path, false)
 		set_link_tools_visible(false)
 	else:
 		if only_image:
@@ -462,7 +333,7 @@ func add_paste_to_selected(only_image = false):
 			if clip_text.find("http") != -1:
 				text_edit.text = clip_text
 				text_edit.readonly = true
-				get_image(clip_text)
+				image_loader.get_image(clip_text)
 			else:
 				# paste text if node is empty, or ask insert at cursor
 				pass

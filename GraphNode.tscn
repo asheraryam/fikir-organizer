@@ -1,7 +1,7 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://GraphNode.gd" type="Script" id=1]
-[ext_resource path="res://TextEditExpand.gd" type="Script" id=2]
+[ext_resource path="res://core/GraphNode.gd" type="Script" id=1]
+[ext_resource path="res://core/TextEditExpand.gd" type="Script" id=2]
 [ext_resource path="res://ImageTextureRect.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Themes/Dialogs/Dialog.tres" type="Theme" id=4]
 [ext_resource path="res://Themes/Nodes/Normal/Option.tres" type="StyleBox" id=5]
@@ -11,6 +11,7 @@
 [ext_resource path="res://Fonts/regular.tres" type="DynamicFont" id=9]
 [ext_resource path="res://Fonts/boldItalics.tres" type="DynamicFont" id=10]
 [ext_resource path="res://Fonts/bold.tres" type="DynamicFont" id=11]
+[ext_resource path="res://core/ImageLoader.tscn" type="PackedScene" id=12]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.145098, 0.172549, 0.231373, 1 )
@@ -55,7 +56,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HTTPRequest" type="HTTPRequest" parent="."]
+[node name="ImageLoader" parent="." instance=ExtResource( 12 )]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 margin_left = 10.0
@@ -179,8 +180,8 @@ max_line = 20
 [connection signal="raise_request" from="." to="." method="_on_Node_raise_request"]
 [connection signal="resize_request" from="." to="." method="_on_Node_resize_request"]
 [connection signal="gui_input" from="HBoxContainer/ImageSettings/TextEdit" to="." method="_on_TextEdit_gui_input"]
-[connection signal="text_changed" from="HBoxContainer/ImageSettings/TextEdit" to="HBoxContainer/ImageSettings/TextEdit" method="_on_ExpandingText_text_changed"]
 [connection signal="text_changed" from="HBoxContainer/ImageSettings/TextEdit" to="." method="_on_TextEdit_text_changed"]
+[connection signal="text_changed" from="HBoxContainer/ImageSettings/TextEdit" to="HBoxContainer/ImageSettings/TextEdit" method="_on_ExpandingText_text_changed"]
 [connection signal="toggled" from="HBoxContainer/ImageSettings/LockButton" to="." method="_on_LockButton_toggled"]
 [connection signal="mouse_entered" from="CaptionContainer" to="." method="_on_CaptionContainer_mouse_entered"]
 [connection signal="mouse_exited" from="CaptionContainer" to="." method="_on_CaptionContainer_mouse_exited"]
@@ -188,5 +189,5 @@ max_line = 20
 [connection signal="mouse_entered" from="CaptionContainer/RichTextContainer/RichText" to="." method="_on_CaptionContainer_mouse_entered"]
 [connection signal="gui_input" from="CaptionContainer/BodyContainer/BodyText" to="." method="_on_BodyText_gui_input"]
 [connection signal="mouse_exited" from="CaptionContainer/BodyContainer/BodyText" to="." method="_on_CaptionContainer_mouse_exited"]
-[connection signal="text_changed" from="CaptionContainer/BodyContainer/BodyText" to="CaptionContainer/BodyContainer/BodyText" method="_on_ExpandingText_text_changed"]
 [connection signal="text_changed" from="CaptionContainer/BodyContainer/BodyText" to="." method="_on_BodyText_text_changed"]
+[connection signal="text_changed" from="CaptionContainer/BodyContainer/BodyText" to="CaptionContainer/BodyContainer/BodyText" method="_on_ExpandingText_text_changed"]
