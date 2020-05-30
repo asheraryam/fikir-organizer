@@ -21,7 +21,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Thinker"
-run/main_scene="res://Nodes/Main.tscn"
+run/main_scene="res://core/Main.tscn"
 run/low_processor_mode=true
 config/icon="res://core/icon.png"
 

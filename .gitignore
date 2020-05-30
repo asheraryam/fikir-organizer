@@ -1,4 +1,6 @@
 
+.vs/
+
 # Godot-specific ignores
 .import/
 [bB]inaries/

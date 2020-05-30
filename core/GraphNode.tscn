@@ -2,16 +2,18 @@
 
 [ext_resource path="res://core/GraphNode.gd" type="Script" id=1]
 [ext_resource path="res://core/TextEditExpand.gd" type="Script" id=2]
-[ext_resource path="res://Nodes/ImageTextureRect.tscn" type="PackedScene" id=3]
+[ext_resource path="res://core/ImageTextureRect.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Themes/Dialogs/Dialog.tres" type="Theme" id=4]
 [ext_resource path="res://Themes/Nodes/Normal/Option.tres" type="StyleBox" id=5]
 [ext_resource path="res://Themes/Nodes/Normal/Expression.tres" type="StyleBox" id=6]
 [ext_resource path="res://core/ExpandingRichTextLabel.gd" type="Script" id=7]
-[ext_resource path="res://Fonts/italics.tres" type="DynamicFont" id=8]
-[ext_resource path="res://Fonts/regular.tres" type="DynamicFont" id=9]
-[ext_resource path="res://Fonts/boldItalics.tres" type="DynamicFont" id=10]
-[ext_resource path="res://Fonts/bold.tres" type="DynamicFont" id=11]
+[ext_resource path="res://Themes/Fonts/italics.tres" type="DynamicFont" id=8]
+[ext_resource path="res://Themes/Fonts/regular.tres" type="DynamicFont" id=9]
+[ext_resource path="res://Themes/Fonts/boldItalics.tres" type="DynamicFont" id=10]
+[ext_resource path="res://Themes/Fonts/bold.tres" type="DynamicFont" id=11]
 [ext_resource path="res://core/ImageLoader.tscn" type="PackedScene" id=12]
+
+
 
 
 
