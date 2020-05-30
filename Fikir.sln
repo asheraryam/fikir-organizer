@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thinker", "Thinker.csproj", "{B1249749-57D7-4B10-9025-6047A65646D9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fikir", "Fikir.csproj", "{B1249749-57D7-4B10-9025-6047A65646D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

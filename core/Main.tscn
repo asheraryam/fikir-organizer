@@ -427,14 +427,14 @@ text = "Save & Quit"
 [node name="Title" type="Label" parent="Toolbar/ToolbarPanel"]
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = -53.0
-margin_top = -0.614716
-margin_right = 53.0
-margin_bottom = 41.3853
+margin_left = 43.5
+margin_top = -1.0
+margin_right = 102.5
+margin_bottom = 41.0
 hint_tooltip = "made by kotob"
 mouse_filter = 1
 custom_fonts/font = SubResource( 6 )
-text = "Thinker"
+text = "Fikir"
 __meta__ = {
 "_edit_use_anchors_": false
 }
