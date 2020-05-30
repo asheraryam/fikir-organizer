@@ -25,19 +25,3 @@ func load_more(data):
 		scroll_offset.y = data["offset_y"]
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-#func _unhandled_input(event :InputEvent):
-#	if event.is_action_pressed("paste"):
-#		if Selection.current_selected:
-#			pass
-#		else:
-#			get_parent().create_node_from_paste()
-#	if event is InputEventMouseButton and event.is_pressed():
-#		if event.button_index == BUTTON_LEFT: 
-##			print("Pressed on BG graph")
-#			if Selection.current_selected:
-#				print("Deselected node")
-#				Selection.current_selected.set_node_selected(false)
-#				Selection.current_selected = null

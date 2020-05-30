@@ -383,10 +383,7 @@ func load_more(data):
 		offset.x = data["offset_x"]
 	if "offset_x" in data:
 		offset.y = data["offset_y"]
-	body_textedit.text = data["text_body"]
-	body_textedit._on_ExpandingText_text_changed()
-	
-	update_rich_label_from_textbox()
+
 
 	var fetched_image_cache = false
 	if local_img_cache:
@@ -403,13 +400,20 @@ func load_more(data):
 		for i in data["str2var"].keys():
 			set(i, str2var(data["str2var"][i]))
 	
+	if "text_body" in data:
+		body_textedit.text = data["text_body"]
+		body_textedit._on_ExpandingText_text_changed()
+		
+		update_rich_label_from_textbox()
+	
 #	_on_Node_resize_request(rect_min_size)
-	if "texture_expand" in data:
-		set_texture_rect_expand(str2var(data["texture_expand"]))
-	if "texture_size" in data:
-		var tmp_size = str2var(data["texture_size"])
-		if tmp_size is Vector2:
-			texture_rect.rect_min_size = tmp_size
+	if image_path:
+		if "texture_expand" in data:
+			set_texture_rect_expand(str2var(data["texture_expand"]))
+		if "texture_size" in data:
+			var tmp_size = str2var(data["texture_size"])
+			if tmp_size is Vector2:
+				texture_rect.rect_min_size = tmp_size
 				
 	
 
