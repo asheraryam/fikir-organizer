@@ -12,7 +12,7 @@ _global_script_classes=[ {
 "base": "RichTextLabel",
 "class": "ExpandingRichTextLabel",
 "language": "GDScript",
-"path": "res://Nodes/ExpandingRichTextLabel.gd"
+"path": "res://core/ExpandingRichTextLabel.gd"
 } ]
 _global_script_class_icons={
 "ExpandingRichTextLabel": ""
@@ -21,14 +21,14 @@ _global_script_class_icons={
 [application]
 
 config/name="Thinker"
-run/main_scene="res://Main.tscn"
+run/main_scene="res://Nodes/Main.tscn"
 run/low_processor_mode=true
-config/icon="res://icon.png"
+config/icon="res://core/icon.png"
 
 [autoload]
 
 Selection="*res://core/SelectionManager.gd"
-persist="*res://autoloads/Persist.gd"
+persist="*res://core/autoloads/Persist.gd"
 
 [display]
 

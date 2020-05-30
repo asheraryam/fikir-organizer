@@ -108,13 +108,23 @@ func load_game(project_name = "main_project"):
 		var node_data = parse_json(save_game.get_line())
 		
 		var new_object
+		var found_node_target = false
 		# Firstly, we need to create the object and add it to the tree and set its position.
 		if "filename" in node_data and "parent" in node_data:
-			new_object = load(node_data["filename"]).instance()
-			get_node(node_data["parent"]).add_child(new_object)
+			var node_pck = load(node_data["filename"])
+			if node_pck:
+				found_node_target = true
+				new_object = node_pck.instance()
+				get_node(node_data["parent"]).add_child(new_object)
 		elif "path" in node_data:
-			new_object = get_node(node_data["path"])
-
+			if has_node(node_data["path"]):
+				found_node_target = true
+				new_object = get_node(node_data["path"])
+			
+		if not found_node_target:
+			push_error("Node could not be loaded, neither file nor path were located.")
+			continue
+			
 		# Now we set the remaining variables.
 		for i in node_data.keys():
 			if i == "filename" or i == "parent" or i == "data":
