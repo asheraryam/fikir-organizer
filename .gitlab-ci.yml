@@ -59,6 +59,7 @@ web:
       
 # Itch.io Deploy
 itchio:linux:
+  image: barichello/godot-ci:3.2.3
   stage: deploy
   script:
     - butler push ./build/linux $ITCHIO_USERNAME/$ITCHIO_GAME:linux
@@ -69,6 +70,7 @@ itchio:linux:
       
 itchio:windows:
   stage: deploy
+  image: barichello/godot-ci:3.2.3
   script:
     - butler push ./build/windows $ITCHIO_USERNAME/$ITCHIO_GAME:windows
   dependencies:
@@ -78,6 +80,7 @@ itchio:windows:
       
 itchio:macosx:
   stage: deploy
+  image: barichello/godot-ci:3.2.3
   script:
     - butler push ./build/mac $ITCHIO_USERNAME/$ITCHIO_GAME:mac
   dependencies:
@@ -87,6 +90,7 @@ itchio:macosx:
       
 itchio:web:
   stage: deploy
+  image: barichello/godot-ci:3.2.3
   script:
     - butler push ./build/web $ITCHIO_USERNAME/$ITCHIO_GAME:web
   dependencies:
