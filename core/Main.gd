@@ -7,7 +7,7 @@ var initial_node_position := Vector2(80,80)
 var additional_offset := Vector2(80,80)
 var node_index = 0 
 
-var graph_node = load("res://GraphNode.tscn")
+var graph_node = load("res://core/GraphNode.tscn")
 onready var clipboard = $Clipboard
 
 # Called when the node enters the scene tree for the first time.
@@ -127,7 +127,7 @@ func create_node_from_paste():
 	var image_file_path = clipboard.get_image()
 	if image_file_path:
 		print("Clipboard saved to: " + str(image_file_path))
-		new_node.set_image_from_local(image_file_path, false)
+		new_node.image_loader.set_image_from_local(image_file_path, false)
 		new_node.set_link_tools_visible(false)
 	else:
 		var clip_text = clipboard.get_text()

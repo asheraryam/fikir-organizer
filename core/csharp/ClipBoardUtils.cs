@@ -31,7 +31,9 @@ public class ClipBoardUtils : Node
 		var random_base_name = get_formatted_date();
 		//var random_base_name = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() +"_"+ rnd.Next().ToString();
 		var file_name = $@"{OS.GetUserDataDir()}\images\{current_project_name}\{random_base_name}.png";
-
+		var file_name_linux = $@"{OS.GetUserDataDir()}/images/{current_project_name}/{random_base_name}.png";
+		//var file_name_linux = $@"/home/dream/{random_base_name}.png";
+		
 		//if (Clipboard.ContainsImage())
 		//{
 		//	GD.Print("Found image in clipboard");
@@ -46,7 +48,8 @@ public class ClipBoardUtils : Node
 		//	//new_image.CreateFromData(width, height,true, Image.Format.BptcRgba, clip_image);
 
 		//}
-
+		if (OperatingSystem.IsWindows())
+		{
 		if (Clipboard.ContainsImage())
 		{
 			//GD.Print("Clipboard contains image.");
@@ -70,6 +73,14 @@ public class ClipBoardUtils : Node
 					//Console.WriteLine("Clipboard copied to UIElement");
 					return file_name;
 				}
+			}
+		}
+		}else if(OperatingSystem.IsLinux()){
+			GD.Print("Linux detected from Mono.");
+			var result = $"xclip -selection clipboard -t TARGETS -o | grep -q 'image' && xclip -selection clipboard -t image/png -o > {file_name_linux} &&  echo 'saved' || echo 'not matched'".Bash();
+			GD.Print("Result of shell: " +result.ToString());
+			if(result.Contains("saved")){
+				return file_name_linux;
 			}
 		}
 		//GD.Print("No Image Found in Clipboard.");
