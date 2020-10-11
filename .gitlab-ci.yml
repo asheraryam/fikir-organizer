@@ -1,4 +1,4 @@
-image: asheraryam/godot-mono-ci:3.2.3
+image: barichello/godot-ci:mono-3.2.3/
 
 stages:
   - export
