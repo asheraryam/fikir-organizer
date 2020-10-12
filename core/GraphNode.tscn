@@ -1,30 +1,15 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://core/GraphNode.gd" type="Script" id=1]
 [ext_resource path="res://core/TextEditExpand.gd" type="Script" id=2]
 [ext_resource path="res://core/ImageTextureRect.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Themes/Dialogs/Dialog.tres" type="Theme" id=4]
-[ext_resource path="res://Themes/Nodes/Normal/Option.tres" type="StyleBox" id=5]
-[ext_resource path="res://Themes/Nodes/Normal/Expression.tres" type="StyleBox" id=6]
+[ext_resource path="res://Themes/Light_Theme.tres" type="Theme" id=4]
 [ext_resource path="res://core/ExpandingRichTextLabel.gd" type="Script" id=7]
 [ext_resource path="res://Themes/Fonts/italics.tres" type="DynamicFont" id=8]
 [ext_resource path="res://Themes/Fonts/regular.tres" type="DynamicFont" id=9]
 [ext_resource path="res://Themes/Fonts/boldItalics.tres" type="DynamicFont" id=10]
 [ext_resource path="res://Themes/Fonts/bold.tres" type="DynamicFont" id=11]
 [ext_resource path="res://core/ImageLoader.tscn" type="PackedScene" id=12]
-
-
-
-
-
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.145098, 0.172549, 0.231373, 1 )
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
-expand_margin_left = 2.0
-expand_margin_right = 2.0
 
 [node name="GraphNode" type="GraphNode" groups=[
 "Persist",
@@ -33,8 +18,6 @@ margin_right = 265.0
 margin_bottom = 111.0
 rect_min_size = Vector2( 160, 40 )
 theme = ExtResource( 4 )
-custom_styles/frame = ExtResource( 5 )
-custom_styles/selectedframe = ExtResource( 6 )
 show_close = true
 resizable = true
 slot/0/left_enabled = false
@@ -63,29 +46,29 @@ __meta__ = {
 [node name="ImageLoader" parent="." instance=ExtResource( 12 )]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-margin_left = 10.0
-margin_top = 33.0
-margin_right = 255.0
-margin_bottom = 59.0
+margin_left = 28.0
+margin_top = 24.0
+margin_right = 279.0
+margin_bottom = 48.0
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ImageSettings" type="HBoxContainer" parent="HBoxContainer"]
-margin_right = 245.0
-margin_bottom = 26.0
+margin_right = 251.0
+margin_bottom = 24.0
 
 [node name="URL_Label" type="Label" parent="HBoxContainer/ImageSettings"]
-margin_top = 6.0
-margin_right = 58.0
-margin_bottom = 20.0
+margin_top = 1.0
+margin_right = 66.0
+margin_bottom = 23.0
 text = "Img URL:"
 
 [node name="TextEdit" type="TextEdit" parent="HBoxContainer/ImageSettings"]
-margin_left = 62.0
-margin_right = 182.0
-margin_bottom = 26.0
+margin_left = 70.0
+margin_right = 190.0
+margin_bottom = 24.0
 rect_min_size = Vector2( 120, 20 )
 hint_tooltip = "Open URL in Browser"
 focus_neighbour_left = NodePath("../../BodyText")
@@ -94,10 +77,6 @@ focus_neighbour_right = NodePath("../../BodyText")
 focus_neighbour_bottom = NodePath("../../BodyText")
 focus_next = NodePath("../../BodyText")
 focus_previous = NodePath("../../BodyText")
-custom_styles/read_only = SubResource( 1 )
-custom_styles/focus = SubResource( 1 )
-custom_styles/normal = SubResource( 1 )
-custom_styles/completion = SubResource( 1 )
 wrap_enabled = true
 script = ExtResource( 2 )
 expand = false
@@ -105,48 +84,46 @@ min_line = 1
 max_line = 1
 
 [node name="LockButton" type="CheckBox" parent="HBoxContainer/ImageSettings"]
-margin_left = 186.0
-margin_right = 245.0
-margin_bottom = 26.0
+margin_left = 194.0
+margin_right = 251.0
+margin_bottom = 24.0
 pressed = true
 text = "Lock"
 
 [node name="ImageContainer" type="HBoxContainer" parent="."]
-margin_left = 10.0
-margin_top = 60.0
-margin_right = 255.0
-margin_bottom = 60.0
+margin_left = 28.0
+margin_top = 49.0
+margin_right = 279.0
+margin_bottom = 49.0
 alignment = 1
 
 [node name="TextureRect" parent="ImageContainer" instance=ExtResource( 3 )]
-margin_left = 122.0
-margin_right = 122.0
+margin_left = 125.0
+margin_right = 125.0
 margin_bottom = 0.0
 rect_min_size = Vector2( 0, 0 )
 stretch_mode = 5
 
 [node name="CaptionContainer" type="MarginContainer" parent="."]
-margin_left = 10.0
-margin_top = 61.0
-margin_right = 255.0
-margin_bottom = 85.0
+margin_left = 28.0
+margin_top = 50.0
+margin_right = 279.0
+margin_bottom = 82.0
 
 [node name="RichTextContainer" type="MarginContainer" parent="CaptionContainer"]
-margin_right = 245.0
-margin_bottom = 24.0
+margin_right = 251.0
+margin_bottom = 32.0
 
 [node name="RichText" type="RichTextLabel" parent="CaptionContainer/RichTextContainer"]
-margin_right = 245.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 160, 24 )
+margin_right = 251.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 160, 32 )
 focus_neighbour_left = NodePath("../HBoxContainer/TextEdit")
 focus_neighbour_top = NodePath("../HBoxContainer/TextEdit")
 focus_neighbour_right = NodePath("../HBoxContainer/TextEdit")
 focus_neighbour_bottom = NodePath("../HBoxContainer/TextEdit")
 focus_next = NodePath("../HBoxContainer/TextEdit")
 focus_previous = NodePath("../HBoxContainer/TextEdit")
-custom_styles/focus = SubResource( 1 )
-custom_styles/normal = SubResource( 1 )
 custom_fonts/bold_italics_font = ExtResource( 10 )
 custom_fonts/italics_font = ExtResource( 8 )
 custom_fonts/bold_font = ExtResource( 11 )
@@ -156,13 +133,13 @@ script = ExtResource( 7 )
 
 [node name="BodyContainer" type="MarginContainer" parent="CaptionContainer"]
 visible = false
-margin_right = 245.0
+margin_right = 251.0
 margin_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="BodyText" type="TextEdit" parent="CaptionContainer/BodyContainer"]
-margin_right = 245.0
+margin_right = 251.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 160, 40 )
 focus_neighbour_left = NodePath("../HBoxContainer/TextEdit")
@@ -171,10 +148,6 @@ focus_neighbour_right = NodePath("../HBoxContainer/TextEdit")
 focus_neighbour_bottom = NodePath("../HBoxContainer/TextEdit")
 focus_next = NodePath("../HBoxContainer/TextEdit")
 focus_previous = NodePath("../HBoxContainer/TextEdit")
-custom_styles/read_only = SubResource( 1 )
-custom_styles/focus = SubResource( 1 )
-custom_styles/normal = SubResource( 1 )
-custom_styles/completion = SubResource( 1 )
 custom_fonts/font = ExtResource( 9 )
 wrap_enabled = true
 script = ExtResource( 2 )

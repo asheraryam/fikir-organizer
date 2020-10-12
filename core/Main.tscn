@@ -1,15 +1,13 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://core/csharp/ClipBoardUtils.cs" type="Script" id=1]
 [ext_resource path="res://core/Toolbar.gd" type="Script" id=2]
 [ext_resource path="res://core/GraphEdit.gd" type="Script" id=3]
 [ext_resource path="res://core/Main.gd" type="Script" id=4]
 [ext_resource path="res://Themes/Dialogs/Dialog.tres" type="Theme" id=5]
-[ext_resource path="res://Themes/Containers/Graph.tres" type="Theme" id=6]
+[ext_resource path="res://Themes/Light_Theme.tres" type="Theme" id=6]
 [ext_resource path="res://Themes/Fonts/OpenSans-Regular.ttf" type="DynamicFontData" id=7]
 [ext_resource path="res://Themes/Fonts/regular.tres" type="DynamicFont" id=8]
-
-[sub_resource type="StyleBoxEmpty" id=1]
 
 [sub_resource type="Animation" id=2]
 resource_name = "toolbar_bottom"
@@ -332,7 +330,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 1
 theme = ExtResource( 6 )
-custom_styles/bg = SubResource( 1 )
 use_snap = false
 script = ExtResource( 3 )
 __meta__ = {
@@ -387,7 +384,7 @@ __meta__ = {
 }
 
 [node name="AddBasic" type="Button" parent="Toolbar/ToolbarPanel/HBoxContainer"]
-margin_right = 94.0
+margin_right = 96.0
 margin_bottom = 40.0
 hint_tooltip = "Shortcut: Alt + A
 Add simple node with a text box."
@@ -396,8 +393,8 @@ shortcut_in_tooltip = false
 text = "+ Basic Node"
 
 [node name="PasteImg" type="Button" parent="Toolbar/ToolbarPanel/HBoxContainer"]
-margin_left = 98.0
-margin_right = 241.0
+margin_left = 100.0
+margin_right = 245.0
 margin_bottom = 40.0
 hint_tooltip = "Shortcut: Ctrl + V
 Paste image or text to current selected node.
@@ -417,7 +414,7 @@ __meta__ = {
 }
 
 [node name="Quit" type="Button" parent="Toolbar/ToolbarPanel/HBoxContainer2"]
-margin_right = 97.0
+margin_right = 99.0
 margin_bottom = 40.0
 hint_tooltip = "Save the current project and quit to desktop."
 theme = ExtResource( 5 )
