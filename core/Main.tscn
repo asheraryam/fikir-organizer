@@ -9,7 +9,7 @@
 [ext_resource path="res://Themes/Fonts/OpenSans-Regular.ttf" type="DynamicFontData" id=7]
 [ext_resource path="res://Themes/Fonts/regular.tres" type="DynamicFont" id=8]
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=1]
 resource_name = "toolbar_bottom"
 length = 0.1
 tracks/0/type = "value"
@@ -133,7 +133,7 @@ tracks/9/keys = {
 "values": [ 0.0, 0.0 ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=2]
 resource_name = "toolbar_pos_bottom"
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:rect_position")
@@ -148,7 +148,7 @@ tracks/0/keys = {
 "values": [ Vector2( 0, 561 ) ]
 }
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=3]
 resource_name = "toolbar_pos_top"
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:rect_position")
@@ -163,7 +163,7 @@ tracks/0/keys = {
 "values": [ Vector2( 0, 0 ) ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=4]
 length = 0.1
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:margin_bottom")
@@ -286,11 +286,11 @@ tracks/9/keys = {
 "values": [ 0.0, 0.0 ]
 }
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=5]
 size = 30
 font_data = ExtResource( 7 )
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="DynamicFont" id=6]
 size = 20
 font_data = ExtResource( 7 )
 
@@ -336,44 +336,75 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Toolbar" type="Control" parent="."]
+[node name="Toolbar" type="VBoxContainer" parent="."]
 anchor_right = 1.0
-margin_left = 218.0
-margin_bottom = 39.0
+margin_bottom = -670.0
+rect_min_size = Vector2( 0, 50 )
+mouse_filter = 2
+custom_constants/separation = 0
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Toolbar"]
-anims/toolbar_bottom = SubResource( 2 )
-anims/toolbar_pos_bottom = SubResource( 3 )
-anims/toolbar_pos_top = SubResource( 4 )
-anims/toolbar_top = SubResource( 5 )
+anims/toolbar_bottom = SubResource( 1 )
+anims/toolbar_pos_bottom = SubResource( 2 )
+anims/toolbar_pos_top = SubResource( 3 )
+anims/toolbar_top = SubResource( 4 )
 
-[node name="ToolbarPanel" type="Panel" parent="Toolbar"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_right = -13.0
+[node name="ToolbarPanel" type="HBoxContainer" parent="Toolbar"]
+margin_right = 1280.0
+margin_bottom = 54.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Toolbar/ToolbarPanel"]
-margin_right = 40.0
-margin_bottom = 40.0
+[node name="PaddingForBuiltin" type="Control" parent="Toolbar/ToolbarPanel"]
+margin_right = 230.0
+margin_bottom = 54.0
+rect_min_size = Vector2( 230, 35 )
+mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Transparent" type="CheckButton" parent="Toolbar/ToolbarPanel/HBoxContainer"]
+[node name="Panel" type="Panel" parent="Toolbar/ToolbarPanel"]
+margin_left = 234.0
+margin_right = 1280.0
+margin_bottom = 54.0
+rect_min_size = Vector2( 0, 40 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Toolbar/ToolbarPanel/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Toolbar/ToolbarPanel/Panel/HBoxContainer"]
+margin_right = 245.0
+margin_bottom = 54.0
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Transparent" type="CheckButton" parent="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer"]
 visible = false
 margin_right = 155.0
 margin_bottom = 40.0
 text = "Transparent"
 
-[node name="Fullscreen" type="CheckButton" parent="Toolbar/ToolbarPanel/HBoxContainer"]
+[node name="Fullscreen" type="CheckButton" parent="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer"]
 visible = false
 margin_right = 146.0
 margin_bottom = 40.0
@@ -383,19 +414,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="AddBasic" type="Button" parent="Toolbar/ToolbarPanel/HBoxContainer"]
+[node name="AddBasic" type="Button" parent="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer"]
 margin_right = 96.0
-margin_bottom = 40.0
+margin_bottom = 54.0
 hint_tooltip = "Shortcut: Alt + A
 Add simple node with a text box."
 theme = ExtResource( 5 )
 shortcut_in_tooltip = false
 text = "+ Basic Node"
 
-[node name="PasteImg" type="Button" parent="Toolbar/ToolbarPanel/HBoxContainer"]
+[node name="PasteImg" type="Button" parent="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer"]
 margin_left = 100.0
 margin_right = 245.0
-margin_bottom = 40.0
+margin_bottom = 54.0
 hint_tooltip = "Shortcut: Ctrl + V
 Paste image or text to current selected node.
 If no node is selected, will create a new one."
@@ -403,58 +434,66 @@ theme = ExtResource( 5 )
 shortcut_in_tooltip = false
 text = "Paste from Clipboard"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Toolbar/ToolbarPanel"]
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -87.0
-margin_bottom = 40.0
-grow_horizontal = 0
+[node name="Title" type="Label" parent="Toolbar/ToolbarPanel/Panel/HBoxContainer"]
+margin_left = 249.0
+margin_right = 943.0
+margin_bottom = 54.0
+hint_tooltip = "made by kotob"
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 5 )
+text = "Fikir"
+align = 1
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Quit" type="Button" parent="Toolbar/ToolbarPanel/HBoxContainer2"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Toolbar/ToolbarPanel/Panel/HBoxContainer"]
+margin_left = 947.0
+margin_right = 1046.0
+margin_bottom = 54.0
+grow_horizontal = 0
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Quit" type="Button" parent="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer2"]
 margin_right = 99.0
-margin_bottom = 40.0
+margin_bottom = 54.0
 hint_tooltip = "Save the current project and quit to desktop."
 theme = ExtResource( 5 )
 custom_fonts/font = ExtResource( 8 )
 text = "Save & Quit"
 
-[node name="Title" type="Label" parent="Toolbar/ToolbarPanel"]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = 43.5
-margin_top = -1.0
-margin_right = 102.5
-margin_bottom = 41.0
-hint_tooltip = "made by kotob"
-mouse_filter = 1
-custom_fonts/font = SubResource( 6 )
-text = "Fikir"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="bykotob" type="Label" parent="Toolbar/ToolbarPanel"]
+[node name="bykotob" type="Label" parent="Toolbar/ToolbarPanel/Panel/HBoxContainer"]
 visible = false
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = 69.943
+margin_left = 950.443
 margin_top = 8.0
-margin_right = 175.943
+margin_right = 1056.44
 margin_bottom = 50.0
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 6 )
 text = "by kotob"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ColorRect" type="ColorRect" parent="Toolbar"]
+margin_top = 54.0
+margin_right = 1280.0
+margin_bottom = 56.0
+rect_min_size = Vector2( 0, 2 )
+color = Color( 0, 0, 0, 1 )
 [connection signal="gui_input" from="GraphEdit" to="." method="_on_GraphEdit_gui_input"]
 [connection signal="node_unselected" from="GraphEdit" to="." method="_on_GraphEdit_node_unselected"]
 [connection signal="scroll_offset_changed" from="GraphEdit" to="." method="_on_GraphEdit_scroll_offset_changed"]
 [connection signal="gui_input" from="Toolbar/ToolbarPanel" to="Toolbar" method="_on_ToolbarPanel_gui_input"]
-[connection signal="toggled" from="Toolbar/ToolbarPanel/HBoxContainer/Transparent" to="." method="_on_Transparent_toggled"]
-[connection signal="toggled" from="Toolbar/ToolbarPanel/HBoxContainer/Fullscreen" to="Toolbar" method="_on_Fullscreen_toggled"]
-[connection signal="pressed" from="Toolbar/ToolbarPanel/HBoxContainer/AddBasic" to="." method="_on_AddBasic_pressed"]
-[connection signal="pressed" from="Toolbar/ToolbarPanel/HBoxContainer/PasteImg" to="." method="_on_PasteImg_pressed"]
-[connection signal="pressed" from="Toolbar/ToolbarPanel/HBoxContainer2/Quit" to="." method="_on_Quit_pressed"]
+[connection signal="toggled" from="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer/Transparent" to="." method="_on_Transparent_toggled"]
+[connection signal="toggled" from="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer/Fullscreen" to="Toolbar" method="_on_Fullscreen_toggled"]
+[connection signal="pressed" from="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer/AddBasic" to="." method="_on_AddBasic_pressed"]
+[connection signal="pressed" from="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer/PasteImg" to="." method="_on_PasteImg_pressed"]
+[connection signal="pressed" from="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer2/Quit" to="." method="_on_Quit_pressed"]
