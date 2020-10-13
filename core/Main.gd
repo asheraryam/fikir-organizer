@@ -196,3 +196,15 @@ func _on_PasteImg_pressed():
 		Selection.current_selected.add_paste_to_selected()
 	else:
 		create_node_from_paste()
+
+
+func _on_ToggleSlots_toggled(button_pressed):
+	var chds = $GraphEdit.get_children()
+	if button_pressed:
+		for c in chds:
+			if c.has_method("show_usable_slots"):
+				c.show_usable_slots()
+	else:
+		for c in chds:
+			if c.has_method("hide_unused_slots"):
+				c.hide_unused_slots()

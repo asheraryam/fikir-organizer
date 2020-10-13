@@ -330,6 +330,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 1
 theme = ExtResource( 6 )
+right_disconnects = true
 use_snap = false
 script = ExtResource( 3 )
 __meta__ = {
@@ -355,7 +356,7 @@ anims/toolbar_top = SubResource( 4 )
 
 [node name="ToolbarPanel" type="HBoxContainer" parent="Toolbar"]
 margin_right = 1280.0
-margin_bottom = 54.0
+margin_bottom = 48.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -366,7 +367,7 @@ __meta__ = {
 
 [node name="PaddingForBuiltin" type="Control" parent="Toolbar/ToolbarPanel"]
 margin_right = 230.0
-margin_bottom = 54.0
+margin_bottom = 48.0
 rect_min_size = Vector2( 230, 35 )
 mouse_filter = 2
 __meta__ = {
@@ -376,7 +377,7 @@ __meta__ = {
 [node name="Panel" type="Panel" parent="Toolbar/ToolbarPanel"]
 margin_left = 234.0
 margin_right = 1280.0
-margin_bottom = 54.0
+margin_bottom = 48.0
 rect_min_size = Vector2( 0, 40 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -391,8 +392,8 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Toolbar/ToolbarPanel/Panel/HBoxContainer"]
-margin_right = 245.0
-margin_bottom = 54.0
+margin_right = 352.0
+margin_bottom = 50.0
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
@@ -416,7 +417,7 @@ __meta__ = {
 
 [node name="AddBasic" type="Button" parent="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer"]
 margin_right = 96.0
-margin_bottom = 54.0
+margin_bottom = 50.0
 hint_tooltip = "Shortcut: Alt + A
 Add simple node with a text box."
 theme = ExtResource( 5 )
@@ -426,7 +427,7 @@ text = "+ Basic Node"
 [node name="PasteImg" type="Button" parent="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer"]
 margin_left = 100.0
 margin_right = 245.0
-margin_bottom = 54.0
+margin_bottom = 50.0
 hint_tooltip = "Shortcut: Ctrl + V
 Paste image or text to current selected node.
 If no node is selected, will create a new one."
@@ -434,10 +435,21 @@ theme = ExtResource( 5 )
 shortcut_in_tooltip = false
 text = "Paste from Clipboard"
 
-[node name="Title" type="Label" parent="Toolbar/ToolbarPanel/Panel/HBoxContainer"]
+[node name="ToggleSlots" type="Button" parent="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer"]
 margin_left = 249.0
+margin_right = 352.0
+margin_bottom = 50.0
+hint_tooltip = "Save the current project and quit to desktop."
+theme = ExtResource( 5 )
+custom_fonts/font = ExtResource( 8 )
+toggle_mode = true
+pressed = true
+text = "Toggle Slots"
+
+[node name="Title" type="Label" parent="Toolbar/ToolbarPanel/Panel/HBoxContainer"]
+margin_left = 356.0
 margin_right = 943.0
-margin_bottom = 54.0
+margin_bottom = 50.0
 hint_tooltip = "made by kotob"
 mouse_filter = 1
 size_flags_horizontal = 3
@@ -453,7 +465,7 @@ __meta__ = {
 [node name="HBoxContainer2" type="HBoxContainer" parent="Toolbar/ToolbarPanel/Panel/HBoxContainer"]
 margin_left = 947.0
 margin_right = 1046.0
-margin_bottom = 54.0
+margin_bottom = 50.0
 grow_horizontal = 0
 size_flags_vertical = 3
 __meta__ = {
@@ -462,7 +474,7 @@ __meta__ = {
 
 [node name="Quit" type="Button" parent="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer2"]
 margin_right = 99.0
-margin_bottom = 54.0
+margin_bottom = 50.0
 hint_tooltip = "Save the current project and quit to desktop."
 theme = ExtResource( 5 )
 custom_fonts/font = ExtResource( 8 )
@@ -483,11 +495,13 @@ __meta__ = {
 }
 
 [node name="ColorRect" type="ColorRect" parent="Toolbar"]
-margin_top = 54.0
+margin_top = 48.0
 margin_right = 1280.0
-margin_bottom = 56.0
+margin_bottom = 50.0
 rect_min_size = Vector2( 0, 2 )
 color = Color( 0, 0, 0, 1 )
+[connection signal="connection_request" from="GraphEdit" to="GraphEdit" method="_on_GraphEdit_connection_request"]
+[connection signal="disconnection_request" from="GraphEdit" to="GraphEdit" method="_on_GraphEdit_disconnection_request"]
 [connection signal="gui_input" from="GraphEdit" to="." method="_on_GraphEdit_gui_input"]
 [connection signal="node_unselected" from="GraphEdit" to="." method="_on_GraphEdit_node_unselected"]
 [connection signal="scroll_offset_changed" from="GraphEdit" to="." method="_on_GraphEdit_scroll_offset_changed"]
@@ -496,4 +510,5 @@ color = Color( 0, 0, 0, 1 )
 [connection signal="toggled" from="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer/Fullscreen" to="Toolbar" method="_on_Fullscreen_toggled"]
 [connection signal="pressed" from="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer/AddBasic" to="." method="_on_AddBasic_pressed"]
 [connection signal="pressed" from="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer/PasteImg" to="." method="_on_PasteImg_pressed"]
+[connection signal="toggled" from="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer/ToggleSlots" to="." method="_on_ToggleSlots_toggled"]
 [connection signal="pressed" from="Toolbar/ToolbarPanel/Panel/HBoxContainer/HBoxContainer2/Quit" to="." method="_on_Quit_pressed"]

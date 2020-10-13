@@ -23,6 +23,8 @@ func _ready():
 	
 	set_rich_text_visible(true)
 	texture_rect.connect("pressed", self, "_on_TextureRect_pressed")
+	
+	show_usable_slots()
 
 var image_loader
 func set_image_loader():
@@ -88,7 +90,6 @@ func set_node_selected(is_selected):
 		title = ""
 		set_selected(false)
 		set_rich_text_visible(true)
-
 
 func set_rich_text_visible(is_visible):
 	if is_visible:
@@ -343,3 +344,69 @@ func add_paste_to_selected(only_image = false):
 
 func _on_BodyText_text_changed():
 	update_rich_label_from_textbox()
+
+
+var ONLY_SHOW_ONE = true
+export(Color) var slot_color = Color.greenyellow
+func show_usable_slots():
+	if ONLY_SHOW_ONE:
+		set_slot(1,true, 0,slot_color,true,0,slot_color)
+		return
+		
+	var graph : GraphEdit = get_node('../')
+	var conns = graph.get_connection_list()
+	var max_left = -1
+	var max_right = -1
+	for conn in conns:
+		if conn.from == name:
+			max_right = max(max_right, conn.from_port)
+		if conn.to == name:
+			max_left = max(max_left, conn.to_port)
+
+	
+	for i in range(3):
+		var r_enabled = true
+		var l_enabled = true
+		if i > max_right+1:
+			r_enabled= false
+		if i > max_left+1:
+			l_enabled= false
+		
+		set_slot(i,l_enabled, 0,slot_color,r_enabled,0,slot_color)
+		
+
+
+func hide_unused_slots():
+	if ONLY_SHOW_ONE:
+		var graph : GraphEdit = get_node('../')
+		var conns = graph.get_connection_list()
+		var max_left = -1
+		var max_right = -1
+		for conn in conns:
+			if conn.from == name:
+				max_right = max(max_right, conn.from_port)
+			if conn.to == name:
+				max_left = max(max_left, conn.to_port)
+		set_slot(1,max_left>-1, 0,slot_color,max_right>-1,0,slot_color)
+		return
+		
+	var graph : GraphEdit = get_node('../')
+	var conns = graph.get_connection_list()
+	var max_left = -1
+	var max_right = -1
+	for conn in conns:
+		if conn.from == name:
+			max_right = max(max_right, conn.from_port)
+		if conn.to == name:
+			max_left = max(max_left, conn.to_port)
+
+	
+	for i in range(3):
+		var r_enabled = true
+		var l_enabled = true
+		if i > max_right:
+			r_enabled= false
+		if i > max_left:
+			l_enabled= false
+		
+		set_slot(i,l_enabled, 0,slot_color,r_enabled,0,slot_color)
