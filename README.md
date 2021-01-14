@@ -3,6 +3,8 @@
 
 > Idea organizer that's a hybrid between a mood board and mind map
 
+[Try it on itch.io](asheraryam.itch.io/fikir-organizer).
+
 ## Features
 
 * **Rich Text** - Use bbcode for **bold**, *italic*, colored text, and [much more](https://docs.godotengine.org/en/stable/tutorials/gui/bbcode_in_richtextlabel.html#reference).
