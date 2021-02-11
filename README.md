@@ -3,7 +3,7 @@
 
 > Idea organizer that's a hybrid between a mood board and mind map
 
-[Try it on itch.io](asheraryam.itch.io/fikir-organizer).
+[Try it on itch.io](https://asheraryam.itch.io/fikir-organizer).
 
 ## Features
 
